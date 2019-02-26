@@ -6,12 +6,17 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert
+  Alert,
+  Image
 } from "react-native";
 import { Card } from "react-native-elements";
 import Icon from "react-native-vector-icons/Ionicons";
 import ButtonWithIcon from "../../../Components/Button/ButtonWithIcon";
+import { RichTextEditor } from "react-native-zss-rich-text-editor";
+import KeyboardSpacer from "react-native-keyboard-spacer";
+import HTML from "react-native-render-html";
 
+import { deleteResearch } from "../../../store/actions/researchActions";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import {
@@ -22,6 +27,8 @@ import {
 class ResearchDetailsScreen extends Component {
   constructor(props) {
     super(props);
+    //this.getHTML = this.getHTML.bind(this);
+    //this.setFocusHandlers = this.setFocusHandlers.bind(this);
   }
 
   static navigatorStyle = {
@@ -41,6 +48,52 @@ class ResearchDetailsScreen extends Component {
       }
     });
   };
+
+  onDeleteResearchHandler = _id => {
+    const data = {
+      id: _id
+    };
+
+    Alert.alert(
+      "Message",
+      "Are you sure?",
+      [
+        {
+          text: "NO",
+          onPress: () => {},
+          style: "cancel"
+        },
+        {
+          text: "YES",
+          onPress: () => {
+            this.props.deleteResearch(data);
+            this.props.navigator.pop();
+          }
+        }
+      ],
+      { cancelable: false }
+    );
+  };
+
+  // onEditorInitialized() {
+  //   this.setFocusHandlers();
+  //   this.getHTML();
+  // }
+
+  // async getHTML() {
+  //   const titleHtml = await this.richtext.getTitleHtml();
+  //   const contentHtml = await this.richtext.getContentHtml();
+  //   //alert(titleHtml + ' ' + contentHtml)
+  // }
+
+  // setFocusHandlers() {
+  //   this.richtext.setTitleFocusHandler(() => {
+  //     //alert('title focus');
+  //   });
+  //   this.richtext.setContentFocusHandler(() => {
+  //     //alert('content focus');
+  //   });
+  // }
 
   deleteAuthorHandler = (researchId, authorId) => {
     Alert.alert(
@@ -122,6 +175,27 @@ class ResearchDetailsScreen extends Component {
       </View>
     );
 
+    if (selResearch.images.length !== 0) {
+      //console.log(selResearch.images);
+      imagesContent = (
+        <View style={{ width: "100%" }}>
+          {selResearch.images.map(imageInfo => (
+            <View key={imageInfo._id}>
+              <Image
+                source={{
+                  uri:
+                    "http://capstong.herokuapp.com/images/researchImages/" +
+                    imageInfo.name
+                }}
+                style={{ minWidth: "100%", minHeight: 150 }}
+                resizeMode="contain"
+              />
+            </View>
+          ))}
+        </View>
+      );
+    }
+
     if (researches === null || loading) {
       researchLayout = (
         <View
@@ -161,14 +235,25 @@ class ResearchDetailsScreen extends Component {
             </View>
 
             <View>
-              <View style={styles.buttonComponentStyle}>
+              <View
+                style={[styles.buttonComponentStyle, { flexDirection: "row" }]}
+              >
                 <ButtonWithIcon iconName={"md-create"}>
                   Edit Research
+                </ButtonWithIcon>
+
+                <ButtonWithIcon
+                  iconName={"md-trash"}
+                  onPress={() => this.onDeleteResearchHandler(selResearch._id)}
+                >
+                  Delete Research
                 </ButtonWithIcon>
               </View>
 
               <Card title="Abstract" titleStyle={{ color: "#17a2b8" }}>
-                <Text style={styles.textStyle}>{selResearch.abstract}</Text>
+                <View style={{ width: "100%" }}>
+                  <HTML html={selResearch.abstract} />
+                </View>
               </Card>
             </View>
 
@@ -226,10 +311,16 @@ const styles = StyleSheet.create({
   buttonComponentStyle: {
     marginTop: 15,
     marginLeft: 15
+  },
+  richText: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent"
   }
 });
 
 ResearchDetailsScreen.propTypes = {
+  deleteResearch: PropTypes.func.isRequired,
   getResearches: PropTypes.func.isRequired,
   research: PropTypes.object.isRequired
 };
@@ -240,5 +331,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getResearches, deleteAuthor }
+  { getResearches, deleteAuthor, deleteResearch }
 )(ResearchDetailsScreen);

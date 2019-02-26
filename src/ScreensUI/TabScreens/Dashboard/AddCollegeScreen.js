@@ -16,10 +16,7 @@ import ImagePicker from "react-native-image-picker";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import {
-  createCollege,
-  getColleges
-} from "../../../store/actions/collegeAction";
+import { createCollege } from "../../../store/actions/collegeAction";
 
 class AddCollegeScreen extends Component {
   static navigatorStyle = {
@@ -36,9 +33,43 @@ class AddCollegeScreen extends Component {
       selectedFile: "",
       background: "#ff0000",
       imageData: null,
-      errors: {}
+      errors: {},
+      submitCtr: 0
     };
     this.pickColorHandler = this.pickColorHandler.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.errors.fullName === "College Name already exists" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "College Name already exists!");
+      this.setState({
+        submitCtr: 0
+      });
+    }
+
+    if (
+      nextProps.errors.initials === "College Initials already exists" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "College Initials already exists!");
+      this.setState({
+        submitCtr: 0
+      });
+    }
+
+    if (
+      nextProps.errors.fullName === undefined &&
+      nextProps.errors.initials === undefined &&
+      this.state.submitCtr === 1
+    ) {
+      this.setState({
+        submitCtr: 0
+      });
+      this.props.navigator.pop();
+    }
   }
 
   changedFullNameHandler = fullName => {
@@ -96,10 +127,14 @@ class AddCollegeScreen extends Component {
 
             onPress: () => {
               this.props.createCollege(collegeData);
-              this.props.navigator.pop();
+              //this.props.navigator.pop();
+              this.setState({
+                submitCtr: 1
+              });
             }
           }
         ],
+
         { cancelable: false }
       );
     }
@@ -134,12 +169,20 @@ class AddCollegeScreen extends Component {
     } catch (err) {}
   };
 
+  setStateHandler = () => {
+    this.setState({
+      submitCtr: 0
+    });
+  };
+
   render() {
+    const { errors } = this.props;
     return (
       <View style={styles.container}>
         <Text style={{ fontSize: 18, fontWeight: "bold", color: "red" }}>
           * = Required Fields
         </Text>
+
         <InputComponent
           placeholder="* College Name"
           onChangeText={this.changedFullNameHandler}

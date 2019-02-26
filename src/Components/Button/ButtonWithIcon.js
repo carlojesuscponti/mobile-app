@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
     color: "white",
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "row"
+    flexDirection: "row",
+    marginRight: 10
   },
   iconStyles: {
     paddingRight: 5

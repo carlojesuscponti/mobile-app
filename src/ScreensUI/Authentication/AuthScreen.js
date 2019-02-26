@@ -49,9 +49,11 @@ class AuthScreen extends Component {
     if (nextProps.auth.isAuthenticated) {
       privateTabScreen();
     }
+
     if (nextProps.errors) {
       this.setState({ errors: nextProps.errors });
     }
+    alert(JSON.stringify(nextProps.errors));
   }
 
   changedUsernameHandler = text => {
@@ -91,7 +93,9 @@ class AuthScreen extends Component {
   };
 
   render() {
-    const { username, password } = this.state;
+    // const { username, password } = this.state;
+    // const { errors } = this.props.errors;
+
     return (
       <View style={styles.container}>
         <View style={styles.labelContainer}>

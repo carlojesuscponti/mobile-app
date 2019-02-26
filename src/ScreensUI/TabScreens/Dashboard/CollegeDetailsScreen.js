@@ -7,9 +7,10 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Alert
+  Alert,
+  RefreshControl
 } from "react-native";
-import Moment from "moment";
+import moment from "moment";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -25,7 +26,6 @@ import Icon from "react-native-vector-icons/Ionicons";
 import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome";
-import collegeLogo from "../../../Pictures/CollegeLogo/coed1549062829422.jpg";
 
 import { Card, ButtonGroup } from "react-native-elements";
 
@@ -41,7 +41,8 @@ class CollegeDetailsScreen extends Component {
     this.state = {
       selectedCollege: {},
       errors: {},
-      ctr: 0
+      ctr: 0,
+      refreshing: false
     };
   }
 
@@ -62,6 +63,14 @@ class CollegeDetailsScreen extends Component {
       this.setState({ errors: nextProps.errors });
     }
   }
+
+  _onRefresh = () => {
+    this.setState({ refreshing: true });
+    if (!this.props.college.loading) {
+      this.props.getColleges();
+      this.setState({ refreshing: false });
+    }
+  };
 
   updateIndex(selectedIndex) {
     const data = this.props.college.colleges.find(college => {
@@ -95,8 +104,24 @@ class CollegeDetailsScreen extends Component {
         } else if (response.error) {
           console.log("ImagePicker Error: ", response.error);
         } else {
-          let copyUri = "data:" + response.type + ";base64," + response.data;
-          alert(JSON.stringify(response));
+          try {
+            let copyUri = "data:" + response.type + ";base64," + response.data;
+            const logoExt = data.logo;
+            const logoname = logoExt.replace(/^.*\\/, "");
+
+            const collegeData = {
+              initials: data.name.initials,
+              oldLogo: data.logo,
+              ext: logoname.split(".").pop(),
+              id: data._id,
+              file: copyUri
+            };
+
+            this.props.changeCollegeLogo(collegeData);
+            this.props.navigator.pop();
+          } catch (err) {
+            console.log(err);
+          }
         }
       });
     }
@@ -165,6 +190,26 @@ class CollegeDetailsScreen extends Component {
       return this.props.selectedCollege._id === college._id;
     });
 
+    let dateFormat = data.lastUpdate.date;
+    dateFormat = dateFormat.slice(0, 10);
+    dateFormat = moment(dateFormat).format("MMM. DD, YYYY");
+
+    let fontColor;
+
+    const c = data.color.substring(1); // strip #
+    const rgb = parseInt(c, 16); // convert rrggbb to decimal
+    const r = (rgb >> 16) & 0xff; // extract red
+    const g = (rgb >> 8) & 0xff; // extract green
+    const b = (rgb >> 0) & 0xff; // extract blue
+
+    const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+
+    if (luma < 65) {
+      fontColor = "white";
+    } else {
+      fontColor = "black";
+    }
+
     let content = (
       <View>
         <Text style={styles.textColor}>
@@ -201,7 +246,7 @@ class CollegeDetailsScreen extends Component {
                     }
                   >
                     <View>
-                      <Icon name="md-trash" size={20} color="red" />
+                      <Icon name="md-trash" size={23} color="red" />
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -229,24 +274,37 @@ class CollegeDetailsScreen extends Component {
             showsVerticalScrollIndicator={false}
             width="100%"
             display="flex"
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
+              />
+            }
           >
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
+            <View
+              style={[
+                styles.imageBackgroudStyle,
+                { backgroundColor: data.color }
+              ]}
+            >
               <Image
-                source={collegeLogo}
-                //   {
-                //   uri:
-                //     "http://capstong.herokuapp.com/images/collegeLogos/" +
-                //     this.props.selectedCollege.logo
-                // }
-
+                source={{
+                  uri:
+                    "https://s3-ap-southeast-1.amazonaws.com/bulsu-capstone/collegeLogos/" +
+                    data.logo
+                }}
                 style={{
                   width: 150,
                   height: 150,
                   borderRadius: 100
                 }}
               />
-              <Text style={styles.textColor}>{data.name.fullName}</Text>
-              <Text style={styles.textColor}>{data.name.initials}</Text>
+              <Text style={{ color: fontColor, fontSize: 20 }}>
+                {data.name.initials}
+              </Text>
+              <Text style={{ color: fontColor, justifyContent: "center" }}>
+                {data.name.fullName}
+              </Text>
             </View>
 
             <ButtonGroup
@@ -328,8 +386,8 @@ class CollegeDetailsScreen extends Component {
                     style={{ paddingRight: 5 }}
                   />
                   <Text style={styles.textColor}>
-                    Last Update:{" "}
-                    {Moment(data.lastUpdate.date).format("MMM. DD, YYYY")}
+                    Last Update:
+                    {" " + dateFormat}
                   </Text>
                 </View>
               </Card>
@@ -360,7 +418,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 5
   },
-  textColor: { color: "black" }
+  imageBackgroudStyle: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    padding: 10
+  },
+  textColor: {
+    color: "black"
+  }
 });
 
 CollegeDetailsScreen.propTypes = {
@@ -368,6 +434,7 @@ CollegeDetailsScreen.propTypes = {
   getColleges: PropTypes.func.isRequired,
   deleteCourse: PropTypes.func.isRequired,
   deleteCollege: PropTypes.func.isRequired,
+  changeCollegeLogo: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired
 };
 
@@ -378,5 +445,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getColleges, deleteCourse, deleteCollege }
+  { changeCollegeLogo, getColleges, deleteCourse, deleteCollege }
 )(CollegeDetailsScreen);

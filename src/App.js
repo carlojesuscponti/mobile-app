@@ -19,6 +19,7 @@ import CollegeDetailsScreen from "./ScreensUI/TabScreens/Dashboard/CollegeDetail
 import ResearchesListScreen from "./ScreensUI/TabScreens/Dashboard/ResearchesListScreen";
 import ResearchDetailsScreen from "./ScreensUI/TabScreens/Dashboard/ResearchDetailsScreen";
 import AddResearchScreen from "./ScreensUI/TabScreens/Dashboard/AddResearchScreen";
+import EditResearchScreen from "./ScreensUI/TabScreens/Dashboard/EditResearchScreen";
 import AddAuthorScreen from "./ScreensUI/TabScreens/Dashboard/AddAuthorScreen";
 
 import SideDrawerScreen from "./ScreensUI/SideDrawer/SideDrawer";
@@ -118,6 +119,13 @@ Navigation.registerComponent(
 Navigation.registerComponent(
   "Client.AddResearchScreen",
   () => AddResearchScreen,
+  store,
+  Provider
+);
+
+Navigation.registerComponent(
+  "Client.EditResearchScreen",
+  () => EditResearchScreen,
   store,
   Provider
 );

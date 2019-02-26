@@ -12,7 +12,7 @@ const flatList = props => {
         <ListItem
           collegeName={info.item.name.fullName}
           collegeImage={
-            "http://capstong.herokuapp.com/images/collegeLogos/" +
+            "https://s3-ap-southeast-1.amazonaws.com/bulsu-capstone/collegeLogos/" +
             info.item.logo
           }
           onItemPressed={() => props.onItemSelected(info.item._id)}

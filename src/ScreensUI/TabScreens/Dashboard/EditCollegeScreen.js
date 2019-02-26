@@ -28,11 +28,46 @@ class EditCollegeScreen extends Component {
       background: this.props.collegeData.color,
       researchTotal: this.props.collegeData.researchTotal,
       journalTotal: this.props.collegeData.journalTotal,
-      errors: {}
+      errors: {},
+      submitCtr: 0
     };
 
     this.pickColorHandler = this.pickColorHandler.bind(this);
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.errors.fullName === "College Name already exists" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "College Name already exists!");
+      this.setState({
+        submitCtr: 0
+      });
+    }
+
+    if (
+      nextProps.errors.initials === "College Initials already exists" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "College Initials already exists!");
+      this.setState({
+        submitCtr: 0
+      });
+    }
+
+    if (
+      nextProps.errors.fullName === undefined &&
+      nextProps.errors.initials === undefined &&
+      this.state.submitCtr === 1
+    ) {
+      this.setState({
+        submitCtr: 0
+      });
+      this.props.navigator.pop();
+    }
+  }
+
   changedFullNameHandler = fullName => {
     this.setState({ fullName });
   };
@@ -95,7 +130,9 @@ class EditCollegeScreen extends Component {
             text: "YES",
             onPress: () => {
               this.props.createCollege(collegeData);
-              this.props.navigator.pop();
+              this.setState({
+                submitCtr: 1
+              });
             }
           }
         ],
@@ -134,8 +171,8 @@ class EditCollegeScreen extends Component {
 
         <View
           style={{
-            width: "100%",
-            height: 150,
+            width: "80%",
+            height: 180,
             flexDirection: "row",
             alignItems: "center"
           }}
@@ -143,7 +180,7 @@ class EditCollegeScreen extends Component {
           <ColorPicker
             onColorChange={color => this.pickColorHandler(color)}
             color={this.state.background}
-            style={{ flex: 1, height: 150, width: 150 }}
+            style={{ flex: 1, height: 180, width: 180 }}
           />
         </View>
         <ButtonComponent onPress={this.submitHandler}>Submit</ButtonComponent>
@@ -166,11 +203,13 @@ const styles = StyleSheet.create({
 
 EditCollegeScreen.propTypes = {
   getColleges: PropTypes.func.isRequired,
-  college: PropTypes.object.isRequired
+  college: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  college: state.college
+  college: state.college,
+  errors: state.errors
 });
 
 export default connect(

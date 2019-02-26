@@ -1,12 +1,8 @@
 rootProject.name = 'BulSUPC'
-include ':react-native-vector-icons'
-project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
+
 include ':react-native-navigation'
 project(':react-native-navigation').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-navigation/android/app')
-include ':react-native-image-picker'
-project(':react-native-image-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-picker/android')
-include ':react-native-file-picker'
-project(':react-native-file-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-file-picker/android')
+
 include ':react-native-file-picker'
 project(':react-native-file-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-file-picker/android')
 
@@ -18,8 +14,8 @@ project(':react-native-vector-icons').projectDir = new File(rootProject.projectD
 
 include ':app'
 
-include ':react-native-navigation'
-project(':react-native-navigation').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-navigation/android/app/')
-
 include ':react-native-svg'
 project(':react-native-svg').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-svg/android')
+
+include ':app', ':react-native-webview-bridge'
+project(':react-native-webview-bridge').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webview-bridge/android')

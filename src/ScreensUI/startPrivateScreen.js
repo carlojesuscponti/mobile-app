@@ -60,7 +60,7 @@ const startTabs = () => {
       ],
       appStyle: {
         tabBarBackgroundColor: "#631B1E",
-        tabBarButtonColor: "#404040",
+        tabBarButtonColor: "#808080",
         tabBarHideShadow: true,
         tabBarSelectedButtonColor: "#fff",
         tabBarTranslucent: false,

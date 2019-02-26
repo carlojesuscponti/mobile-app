@@ -1,15 +1,30 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Picker, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Picker,
+  TextInput,
+  ScrollView,
+  Alert
+} from "react-native";
 
 import InputComponent from "../../../Components/Input/InputComponent";
 import ButtonComponent from "../../../Components/Button/ButtonComponent";
 import RadioGroup from "react-native-radio-buttons-group";
+import { RichTextEditor } from "react-native-zss-rich-text-editor";
 
 import { getColleges } from "../../../store/actions/collegeAction";
+import { createResearch } from "../../../store/actions/researchActions";
+
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 class AddResearchScreen extends Component {
+  static navigatorStyle = {
+    navBarTitleTextCentered: true
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -18,17 +33,48 @@ class AddResearchScreen extends Component {
       college: "",
       course: "",
       abstract: "",
-      pages: ""
+      pages: "",
+      submitCtr: 0
     };
   }
 
-  static navigatorStyle = {
-    navBarTitleTextCentered: true
-  };
-
-  componentWillMount() {
+  componentWIllMount() {
     if (!this.props.college.loading) {
       this.props.getColleges();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      nextProps.errors.pages === "Research pages is invalid" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "Research pages is invalid!");
+      this.setState({
+        submitCtr: 0
+      });
+    }
+
+    if (
+      nextProps.errors.abstract ===
+        "Abstract must be at least 100 characters" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "Abstract must be at least 100 characters!");
+      this.setState({
+        submitCtr: 0
+      });
+    }
+
+    if (
+      nextProps.errors.abstract === undefined &&
+      nextProps.errors.pages === undefined &&
+      this.state.submitCtr === 1
+    ) {
+      this.setState({
+        submitCtr: 0
+      });
+      this.props.navigator.pop();
     }
   }
 
@@ -59,17 +105,56 @@ class AddResearchScreen extends Component {
   };
 
   submitHandler = () => {
-    const researchData = {
-      title: this.state.title,
-      type: this.state.type,
-      college: this.state.college,
-      course: this.state.course,
-      abstract: this.state.abstract,
-      pages: this.state.pages
-    };
+    const { title, college, course, abstract, pages } = this.state;
+    if (
+      title === "" ||
+      college === "" ||
+      course === "" ||
+      abstract === "" ||
+      pages === ""
+    ) {
+      alert("Fill up all the fields!");
+    } else {
+      const researchData = {
+        title: this.state.title,
+        type: this.state.type,
+        college: this.state.college,
+        course: this.state.course,
+        abstract: this.state.abstract,
+        pages: this.state.pages
+      };
 
-    alert(JSON.stringify(researchData));
+      Alert.alert(
+        "Message",
+        "Are you sure?",
+        [
+          {
+            text: "Cancel",
+            onPress: () => {
+              this.props.navigator.pop();
+            },
+            style: "cancel"
+          },
+          {
+            text: "NO",
+            onPress: () => {},
+            style: "cancel"
+          },
+          {
+            text: "YES",
+            onPress: () => {
+              this.props.createResearch(researchData);
+              this.setState({
+                submitCtr: 1
+              });
+            }
+          }
+        ],
+        { cancelable: false }
+      );
+    }
   };
+
   render() {
     const { colleges, loading } = this.props.college;
 
@@ -102,74 +187,88 @@ class AddResearchScreen extends Component {
 
     return (
       <View style={styles.container}>
-        <Text style={{ fontSize: 18, fontWeight: "bold", color: "red" }}>
-          * = Required Fields
-        </Text>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          width="100%"
+          display="flex"
+        >
+          <View style={{ alignItems: "center" }}>
+            <Text style={{ fontSize: 18, fontWeight: "bold", color: "red" }}>
+              * = Required Fields
+            </Text>
 
-        <RadioGroup
-          radioButtons={radioCollegeOptions}
-          flexDirection="row"
-          onPress={this.radioGroupHandler}
-        />
+            <RadioGroup
+              radioButtons={radioCollegeOptions}
+              flexDirection="row"
+              onPress={this.radioGroupHandler}
+            />
 
-        <InputComponent
-          placeholder="* Research Title"
-          onChangeText={this.changedTitleHandler}
-          value={this.state.title}
-          icon="ios-cog"
-        />
+            <InputComponent
+              placeholder="* Research Title"
+              onChangeText={this.changedTitleHandler}
+              value={this.state.title}
+              icon="ios-cog"
+            />
 
-        <View style={styles.pickerStyle}>
-          <Picker
-            selectedValue={this.state.college}
-            onValueChange={itemValue => this.setState({ college: itemValue })}
-          >
-            {dropCollegeOptions.map((colOptions, key) => {
-              return (
-                <Picker.Item
-                  key={key}
-                  label={colOptions.label}
-                  value={colOptions.value}
-                />
-              );
-            })}
-          </Picker>
-        </View>
+            <View style={styles.pickerStyle}>
+              <Picker
+                selectedValue={this.state.college}
+                onValueChange={itemValue =>
+                  this.setState({ college: itemValue })
+                }
+              >
+                {dropCollegeOptions.map((colOptions, key) => {
+                  return (
+                    <Picker.Item
+                      key={key}
+                      label={colOptions.label}
+                      value={colOptions.value}
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
 
-        <View style={styles.pickerStyle}>
-          <Picker
-            selectedValue={this.state.course}
-            onValueChange={itemValue => this.setState({ course: itemValue })}
-          >
-            {dropCourseOptions.map((corOptions, key) => {
-              return (
-                <Picker.Item
-                  key={key}
-                  label={corOptions.label}
-                  value={corOptions.value}
-                />
-              );
-            })}
-          </Picker>
-        </View>
+            <View style={styles.pickerStyle}>
+              <Picker
+                selectedValue={this.state.course}
+                onValueChange={itemValue =>
+                  this.setState({ course: itemValue })
+                }
+              >
+                {dropCourseOptions.map((corOptions, key) => {
+                  return (
+                    <Picker.Item
+                      key={key}
+                      label={corOptions.label}
+                      value={corOptions.value}
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
 
-        <View style={styles.textContainer}>
-          <TextInput
-            multiline={true}
-            numberOfLines={5}
-            style={{ height: 100, textAlignVertical: "top" }}
-            placeholder="* Abstract"
-            onChangeText={this.changedAbstractHandler}
-          />
-        </View>
+            <View style={styles.textContainer}>
+              <TextInput
+                multiline={true}
+                numberOfLines={5}
+                style={{ maxHeight: 150, textAlignVertical: "top" }}
+                placeholder="* Abstract"
+                onChangeText={this.changedAbstractHandler}
+              />
+            </View>
 
-        <InputComponent
-          placeholder="* Pages"
-          onChangeText={this.changedPagesHandler}
-          value={this.state.pages}
-          icon="ios-cog"
-        />
-        <ButtonComponent onPress={this.submitHandler}>Submit</ButtonComponent>
+            <InputComponent
+              placeholder="* Pages"
+              onChangeText={this.changedPagesHandler}
+              value={this.state.pages}
+              icon="ios-cog"
+            />
+            <ButtonComponent onPress={this.submitHandler}>
+              Submit
+            </ButtonComponent>
+          </View>
+        </ScrollView>
       </View>
     );
   }
@@ -178,7 +277,7 @@ class AddResearchScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center"
+    width: "100%"
   },
   pickerStyle: {
     width: "80%",
@@ -197,6 +296,8 @@ const styles = StyleSheet.create({
 });
 
 AddResearchScreen.propTypes = {
+  createResearch: PropTypes.func.isRequired,
+  getColleges: PropTypes.func.isRequired,
   college: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -208,5 +309,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getColleges }
+  { createResearch, getColleges }
 )(AddResearchScreen);

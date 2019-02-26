@@ -8,6 +8,7 @@ import {
 import axios from "axios";
 
 export const getColleges = () => dispatch => {
+  dispatch(clearErrors());
   dispatch(setCollegeLoading());
   axios
     .get("https://capstong.herokuapp.com/api/colleges/all")
@@ -27,8 +28,6 @@ export const getColleges = () => dispatch => {
 
 // Create / Update College collegeData, history
 export const createCollege = collegeData => dispatch => {
-  dispatch(clearErrors());
-  dispatch(setCollegeLoading());
   axios
     .post("https://capstong.herokuapp.com/api/colleges", collegeData)
     .then(res => {
@@ -41,6 +40,7 @@ export const createCollege = collegeData => dispatch => {
         type: GET_ERRORS,
         payload: err.response.data
       });
+      console.log(err.response.data);
     });
 };
 
@@ -49,6 +49,7 @@ export const changeCollegeLogo = collegeData => dispatch => {
   axios
     .post("https://capstong.herokuapp.com/api/colleges/changeLogo", collegeData)
     .then(res => {
+      dispatch(getColleges());
       // history.push(`/colleges`);
       // history.push(`/colleges/${collegeData.initials}`);
     })
@@ -113,6 +114,20 @@ export const deleteCourse = (collegeId, courseId) => dispatch => {
     );
 };
 
+// set loading state
+export const setCollegeLoading = () => {
+  return {
+    type: COLLEGE_LOADING
+  };
+};
+
+// Clear errors
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
+  };
+};
+
 // Get college by id
 // export const getCollegeByInitials = initials => dispatch => {
 //   dispatch(clearErrors());
@@ -132,17 +147,3 @@ export const deleteCourse = (collegeId, courseId) => dispatch => {
 //       })
 //     );
 // };
-
-// set loading state
-export const setCollegeLoading = () => {
-  return {
-    type: COLLEGE_LOADING
-  };
-};
-
-// Clear errors
-export const clearErrors = () => {
-  return {
-    type: CLEAR_ERRORS
-  };
-};

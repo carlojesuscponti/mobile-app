@@ -10,6 +10,7 @@ import {
 
 // Get all researches
 export const getResearches = () => dispatch => {
+  dispatch(clearErrors());
   dispatch(setResearchLoading());
   axios
     .get("http://capstong.herokuapp.com/api/researches")
@@ -23,6 +24,46 @@ export const getResearches = () => dispatch => {
       dispatch({
         type: GET_RESEARCHES,
         payload: null
+      })
+    );
+};
+
+// Create / Update Research
+export const createResearch = researchData => dispatch => {
+  axios
+    .post("http://capstong.herokuapp.com/api/researches", researchData)
+    .then(res => {
+      dispatch(getResearches());
+      // if (researchData.id) {
+      //   history.push(`/researches/${researchData.id}`);
+      // } else {
+      //   history.push(`/researches`);
+      // }
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// Delete Research
+export const deleteResearch = data => dispatch => {
+  dispatch(setResearchLoading());
+  axios
+    .delete(`http://capstong.herokuapp.com/api/researches/${data.id}`)
+    .then(res => {
+      dispatch(getResearches());
+      // dispatch({
+      //   type: GET_RESEARCH,
+      //   payload: res.data
+      // })
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
       })
     );
 };

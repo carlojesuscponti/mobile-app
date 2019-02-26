@@ -6,7 +6,9 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
-  Picker
+  Picker,
+  RefreshControl,
+  ScrollView
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import Flatlists from "../../../Components/ResearchFlatlist/Flatlist";
@@ -22,7 +24,8 @@ class ResearchesListScreen extends Component {
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
 
     this.state = {
-      searchBar: ""
+      searchBar: "",
+      refreshing: false
     };
   }
   static navigatorStyle = {
@@ -81,6 +84,14 @@ class ResearchesListScreen extends Component {
     });
   };
 
+  _onRefresh = () => {
+    this.setState({ refreshing: true });
+    if (!this.props.college.loading) {
+      this.props.getColleges();
+      this.setState({ refreshing: false });
+    }
+  };
+
   render() {
     const { researches, loading } = this.props.research;
     let researchLayout;
@@ -123,17 +134,28 @@ class ResearchesListScreen extends Component {
                 value={this.state.searchBar}
               />
             </View>
+
             <View style={{ width: "10%", alignItems: "center" }}>
               {content}
             </View>
           </View>
 
-          <View style={{ alignItems: "center" }}>
-            <Flatlists
-              researchesData={researches}
-              onItemSelected={this.itemSelectedHandler}
-            />
-          </View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
+              />
+            }
+          >
+            <View style={{ alignItems: "center" }}>
+              <Flatlists
+                researchesData={researches}
+                onItemSelected={this.itemSelectedHandler}
+              />
+            </View>
+          </ScrollView>
         </View>
       );
     }

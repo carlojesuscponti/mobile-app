@@ -5,7 +5,8 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import com.imagepicker.ImagePickerPackage;
 import com.filepicker.FilePickerPackage;
-import com.reactnativenavigation.bridge.NavigationReactPackage;
+import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
+//import com.reactnativenavigation.bridge.NavigationReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -28,7 +29,8 @@ public class MainApplication extends NavigationApplication {
 		return Arrays.<ReactPackage>asList(
           new VectorIconsPackage(),
 					new ImagePickerPackage(),
-					new FilePickerPackage()
+					new FilePickerPackage(),
+					new WebViewBridgePackage() 
       );
     }
 
