@@ -12,9 +12,9 @@ import {
 import { Card } from "react-native-elements";
 import Icon from "react-native-vector-icons/Ionicons";
 import ButtonWithIcon from "../../../Components/Button/ButtonWithIcon";
-import { RichTextEditor } from "react-native-zss-rich-text-editor";
 import KeyboardSpacer from "react-native-keyboard-spacer";
 import HTML from "react-native-render-html";
+import ImagePicker from "react-native-image-picker";
 
 import { deleteResearch } from "../../../store/actions/researchActions";
 import { connect } from "react-redux";
@@ -94,6 +94,26 @@ class ResearchDetailsScreen extends Component {
   //     //alert('content focus');
   //   });
   // }
+
+  pickImageHandler = () => {
+    try {
+      ImagePicker.launchImageLibrary({ title: "Choose Image" }, response => {
+        if (response.didCancel) {
+          console.log("User cancelled image picker");
+        } else if (response.error) {
+          console.log("ImagePicker Error: ", response.error);
+        } else {
+          alert(JSON.stringify(response.fileName));
+          // let copyUri = "data:" + response.type + ";base64," + response.data;
+          // this.setState({
+          //   logo: response.fileName,
+          //   imageData: { uri: copyUri },
+          //   selectedFile: copyUri
+          // });
+        }
+      });
+    } catch (err) {}
+  };
 
   deleteAuthorHandler = (researchId, authorId) => {
     Alert.alert(
@@ -176,15 +196,14 @@ class ResearchDetailsScreen extends Component {
     );
 
     if (selResearch.images.length !== 0) {
-      //console.log(selResearch.images);
       imagesContent = (
         <View style={{ width: "100%" }}>
           {selResearch.images.map(imageInfo => (
-            <View key={imageInfo._id}>
+            <View style={{ marginBottom: 5 }} key={imageInfo._id}>
               <Image
                 source={{
                   uri:
-                    "http://capstong.herokuapp.com/images/researchImages/" +
+                    "https://s3-ap-southeast-1.amazonaws.com/bulsu-capstone/researchImages/" +
                     imageInfo.name
                 }}
                 style={{ minWidth: "100%", minHeight: 150 }}
@@ -273,7 +292,12 @@ class ResearchDetailsScreen extends Component {
 
             <View style={{ marginBottom: 10 }}>
               <View style={styles.buttonComponentStyle}>
-                <ButtonWithIcon iconName={"md-add"}>Add Images</ButtonWithIcon>
+                <ButtonWithIcon
+                  iconName={"md-add"}
+                  onPress={this.pickImageHandler}
+                >
+                  Add Images
+                </ButtonWithIcon>
               </View>
 
               <Card title="Images" titleStyle={{ color: "#17a2b8" }}>

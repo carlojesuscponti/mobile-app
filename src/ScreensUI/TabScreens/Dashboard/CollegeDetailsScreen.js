@@ -42,7 +42,8 @@ class CollegeDetailsScreen extends Component {
       selectedCollege: {},
       errors: {},
       ctr: 0,
-      refreshing: false
+      refreshing: false,
+      changedImageCtr: 0
     };
   }
 
@@ -59,8 +60,11 @@ class CollegeDetailsScreen extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
+    if (this.state.changedImageCtr === 1) {
+      //alert(JSON.stringify(this.props.college.loading));
+      this.setState({
+        changedImageCtr: 0
+      });
     }
   }
 
@@ -118,7 +122,10 @@ class CollegeDetailsScreen extends Component {
             };
 
             this.props.changeCollegeLogo(collegeData);
-            this.props.navigator.pop();
+            this.setState({
+              changedImageCtr: 1
+            });
+            //this.props.navigator.pop();
           } catch (err) {
             console.log(err);
           }
@@ -259,7 +266,7 @@ class CollegeDetailsScreen extends Component {
       alert(JSON.stringify(data));
     }
 
-    if (colleges === null || loading) {
+    if (colleges === null || loading || this.state.changedImageCtr === 1) {
       collegeLayout = (
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}

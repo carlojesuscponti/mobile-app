@@ -12,7 +12,6 @@ import {
 import InputComponent from "../../../Components/Input/InputComponent";
 import ButtonComponent from "../../../Components/Button/ButtonComponent";
 import RadioGroup from "react-native-radio-buttons-group";
-import { RichTextEditor } from "react-native-zss-rich-text-editor";
 
 import { getColleges } from "../../../store/actions/collegeAction";
 import { createResearch } from "../../../store/actions/researchActions";
