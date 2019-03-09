@@ -1,4 +1,17 @@
 rootProject.name = 'BulSUPC'
+include ':app'
+
+include ':react-native-fetch-blob'
+project(':react-native-fetch-blob').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fetch-blob/android')
+
+include ':react-native-file-selector'
+project(':react-native-file-selector').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-file-selector/android')
+
+include ':react-native-view-pdf'
+project(':react-native-view-pdf').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-view-pdf/android')
+
+include ':react-native-document-picker'
+project(':react-native-document-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-document-picker/android')
 
 include ':react-native-navigation'
 project(':react-native-navigation').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-navigation/android/app')
@@ -12,7 +25,6 @@ project(':react-native-image-picker').projectDir = new File(rootProject.projectD
 include ':react-native-vector-icons'
 project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
 
-include ':app'
 
 include ':react-native-svg'
 project(':react-native-svg').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-svg/android')

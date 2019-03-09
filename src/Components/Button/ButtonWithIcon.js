@@ -1,10 +1,16 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableNativeFeedback } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableNativeFeedback,
+  TouchableOpacity
+} from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
 const ButtonWithIcon = props => {
   return (
-    <TouchableNativeFeedback onPress={props.onPress}>
+    <TouchableOpacity onPress={props.onPress}>
       <View style={styles.buttonStyle}>
         <Icon
           name={props.iconName}
@@ -14,12 +20,12 @@ const ButtonWithIcon = props => {
         />
         <Text style={styles.textStyle}>{props.children}</Text>
       </View>
-    </TouchableNativeFeedback>
+    </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({
   buttonStyle: {
-    width: "40%",
+    width: "100%",
     height: 40,
     backgroundColor: "#f8f9fa",
     borderColor: "#17a2b8",

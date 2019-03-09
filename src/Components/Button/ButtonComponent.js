@@ -4,7 +4,10 @@ import Icon from "react-native-vector-icons/Ionicons";
 
 const ButtonComponent = props => {
   return (
-    <TouchableNativeFeedback onPress={props.onPress}>
+    <TouchableNativeFeedback
+      onPress={props.onPress}
+      disabled={props.disabledButton}
+    >
       <View style={styles.buttonStyle}>
         <Icon
           name={props.iconName}

@@ -8,10 +8,10 @@ import {
 import axios from "axios";
 
 export const getColleges = () => dispatch => {
-  dispatch(clearErrors());
   dispatch(setCollegeLoading());
+  dispatch(clearErrors());
   axios
-    .get("https://capstong.herokuapp.com/api/colleges/all")
+    .get("http://capstong.herokuapp.com/api/colleges/all")
     .then(res =>
       dispatch({
         type: GET_COLLEGES,
@@ -28,8 +28,9 @@ export const getColleges = () => dispatch => {
 
 // Create / Update College collegeData, history
 export const createCollege = collegeData => dispatch => {
+  dispatch(clearErrors());
   axios
-    .post("https://capstong.herokuapp.com/api/colleges", collegeData)
+    .post("http://capstong.herokuapp.com/api/colleges/", collegeData)
     .then(res => {
       dispatch(getColleges());
       //console.log(res);
@@ -40,14 +41,14 @@ export const createCollege = collegeData => dispatch => {
         type: GET_ERRORS,
         payload: err.response.data
       });
-      console.log(err.response.data);
     });
 };
 
 // Change College Logo
 export const changeCollegeLogo = collegeData => dispatch => {
+  dispatch(clearErrors());
   axios
-    .post("https://capstong.herokuapp.com/api/colleges/changeLogo", collegeData)
+    .post("http://capstong.herokuapp.com/api/colleges/changeLogo", collegeData)
     .then(res => {
       dispatch(getColleges());
       // history.push(`/colleges`);
@@ -66,9 +67,30 @@ export const deleteCollege = data => dispatch => {
   dispatch(clearErrors());
   dispatch(setCollegeLoading());
   axios
-    .post(`https://capstong.herokuapp.com/api/colleges/${data.id}`, data)
+    .post(`http://capstong.herokuapp.com/api/colleges/remove/${data.id}`, data)
     .then(res => {
       dispatch(getColleges());
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+// Restore College
+export const restoreCollege = data => dispatch => {
+  dispatch(clearErrors());
+  dispatch(setCollegeLoading());
+  axios
+    .post(`http://capstong.herokuapp.com/api/colleges/restore/${data.id}`, data)
+    .then(res => {
+      dispatch(getColleges());
+      // dispatch({
+      //   type: GET_COLLEGE,
+      //   payload: res.data
+      // })
     })
     .catch(err =>
       dispatch({
@@ -81,9 +103,8 @@ export const deleteCollege = data => dispatch => {
 // Add Course
 export const addCourse = courseData => dispatch => {
   dispatch(clearErrors());
-  dispatch(setCollegeLoading());
   axios
-    .post("https://capstong.herokuapp.com/api/colleges/course", courseData)
+    .post("http://capstong.herokuapp.com/api/colleges/course/", courseData)
     .then(res => {
       dispatch(getColleges());
       //history.push(`/colleges/${courseData.college.college.name.initials}`)
@@ -96,13 +117,28 @@ export const addCourse = courseData => dispatch => {
     );
 };
 
+// Edit Course
+export const editCourse = courseData => dispatch => {
+  dispatch(clearErrors());
+  axios
+    .post("http://capstong.herokuapp.com/api/colleges/editcourse", courseData)
+    .then(res => {
+      dispatch(getColleges());
+    })
+    .catch(err =>
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
 // Delete Course
-export const deleteCourse = (collegeId, courseId) => dispatch => {
+export const deleteCourse = course => dispatch => {
+  dispatch(clearErrors());
   dispatch(setCollegeLoading());
   axios
-    .delete(
-      `https://capstong.herokuapp.com/api/colleges/course/${collegeId}/${courseId}`
-    )
+    .post(`http://capstong.herokuapp.com/api/colleges/deletecourse`, course)
     .then(res => {
       dispatch(getColleges());
     })
@@ -127,23 +163,3 @@ export const clearErrors = () => {
     type: CLEAR_ERRORS
   };
 };
-
-// Get college by id
-// export const getCollegeByInitials = initials => dispatch => {
-//   dispatch(clearErrors());
-//   dispatch(setCollegeLoading());
-//   axios
-//     .get(`https://capstong.herokuapp.com/api/colleges/${initials}`)
-//     .then(res =>
-//       dispatch({
-//         type: GET_COLLEGE,
-//         payload: res.data
-//       })
-//     )
-//     .catch(err =>
-//       dispatch({
-//         type: GET_COLLEGE,
-//         payload: null
-//       })
-//     );
-// };

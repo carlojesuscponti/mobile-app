@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, Button, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { addCourse } from "../../../store/actions/collegeAction";
-import InputComponent from "../../../Components/Input/InputComponent";
-import ButtonComponent from "../../../Components/Button/ButtonComponent";
-import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
+import { addAuthor } from "../../../../store/actions/researchActions";
+import InputComponent from "../../../../Components/Input/InputComponent";
+import ButtonComponent from "../../../../Components/Button/ButtonComponent";
 
-class AddCourseScreen extends Component {
+class AddAuthorScreen extends Component {
   static navigatorStyle = {
     navBarTitleTextCentered: true
   };
@@ -16,20 +15,27 @@ class AddCourseScreen extends Component {
     super(props);
     this.state = {
       name: "",
-      initials: "",
-      errors: {}
+      role: ""
     };
   }
+
+  changedNameHandler = name => {
+    this.setState({ name });
+  };
+
+  changedRoleHandler = role => {
+    this.setState({ role });
+  };
+
   submitHandler = () => {
-    const { name, initials } = this.state;
-    if (name === "" || initials === "") {
+    const { name, role } = this.state;
+    if (name === "" || role === "") {
       Alert.alert("Warning", "Fill up the fields!");
     } else {
-      const courseData = {
-        name: this.state.name,
-        initials: this.state.initials,
-        colId: this.props.collegeData._id,
-        college: this.props.collegeData
+      const authorData = {
+        name: name,
+        role: role,
+        researchId: this.props.researchId
       };
 
       Alert.alert(
@@ -51,7 +57,7 @@ class AddCourseScreen extends Component {
           {
             text: "YES",
             onPress: () => {
-              this.props.addCourse(courseData);
+              this.props.addAuthor(authorData);
               this.props.navigator.pop();
             }
           }
@@ -61,30 +67,24 @@ class AddCourseScreen extends Component {
     }
   };
 
-  changedNameHandler = val => {
-    this.setState({ name: val });
-  };
-
-  changedInitialsHandler = val => {
-    this.setState({ initials: val });
-  };
-
   render() {
     return (
       <View style={styles.container}>
+        <Text style={styles.textStyle}>* = Required Fields</Text>
         <InputComponent
-          placeholder="* Course Name"
-          onChangeText={this.changedNameHandler}
-          value={this.state.name}
+          placeholder="* Name"
           icon="ios-cog"
+          value={this.state.name}
+          onChangeText={this.changedNameHandler}
         />
 
         <InputComponent
-          placeholder="* Course Initials"
-          onChangeText={this.changedInitialsHandler}
-          value={this.state.initials}
+          placeholder="* Role"
           icon="ios-cog"
+          value={this.state.role}
+          onChangeText={this.changedRoleHandler}
         />
+
         <ButtonComponent onPress={this.submitHandler}> Submit </ButtonComponent>
       </View>
     );
@@ -95,21 +95,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center"
+  },
+  textStyle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "red"
   }
 });
 
-AddCourseScreen.propTypes = {
+AddAuthorScreen.propTypes = {
   errors: PropTypes.object.isRequired,
-  addCourse: PropTypes.func.isRequired,
-  college: PropTypes.object.isRequired
+  addAuthor: PropTypes.func.isRequired,
+  research: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   errors: state.errors,
-  college: state.college
+  research: state.research
 });
 
 export default connect(
   mapStateToProps,
-  { addCourse }
-)(AddCourseScreen);
+  { addAuthor }
+)(AddAuthorScreen);

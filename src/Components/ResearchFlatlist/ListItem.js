@@ -11,6 +11,8 @@ const listItem = props => (
       </View>
       <View style={{ width: "85%" }}>
         <Text>{props.researchesName}</Text>
+        <Text>{props.researchesCollege}</Text>
+        <Text>{props.researchesCourse}</Text>
       </View>
 
       <View style={{ width: "5%" }}>
@@ -23,9 +25,14 @@ const listItem = props => (
 const styles = StyleSheet.create({
   listItem: {
     width: "100%",
-    marginBottom: 5,
+    height: 100,
+    marginTop: 3,
+    marginBottom: 3,
     padding: 10,
-    backgroundColor: "#eee",
+    backgroundColor: "#f8f9fa",
+    borderRadius: 5,
+    borderColor: "#808080",
+    borderWidth: 1,
     flexDirection: "row",
     alignItems: "center"
   },

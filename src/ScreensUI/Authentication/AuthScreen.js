@@ -6,7 +6,8 @@ import {
   Image,
   AsyncStorage,
   TextInput,
-  ScrollView
+  ScrollView,
+  Alert
 } from "react-native";
 import axios from "axios";
 import PropTypes from "prop-types";
@@ -29,7 +30,7 @@ class AuthScreen extends Component {
     this.state = {
       username: "",
       password: "",
-      disableButton: true,
+      disableButton: false,
       errors: {}
     };
   }
@@ -50,10 +51,15 @@ class AuthScreen extends Component {
       privateTabScreen();
     }
 
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
+    if (nextProps.errors.username === "User not found!") {
+      Alert.alert("Warning", "User not found!");
+      this.setState({ disableButton: false });
     }
-    alert(JSON.stringify(nextProps.errors));
+
+    if (nextProps.errors.password === "Password Incorrect!") {
+      Alert.alert("Warning", "Password Incorrect!");
+      this.setState({ disableButton: false });
+    }
   }
 
   changedUsernameHandler = text => {
@@ -81,7 +87,7 @@ class AuthScreen extends Component {
 
   loginHandler = () => {
     if (this.state.username === "" && this.state.password === "") {
-      alert("Fill all the fields!");
+      Alert.alert("Message", "Fill all the fields!");
     } else {
       const userData = {
         username: this.state.username,
@@ -89,6 +95,7 @@ class AuthScreen extends Component {
       };
 
       this.props.loginUser(userData);
+      this.setState({ disableButton: true });
     }
   };
 
@@ -99,7 +106,9 @@ class AuthScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.labelContainer}>
-          <TextHeadingComponent>BulSU Plagiarism Checker</TextHeadingComponent>
+          <TextHeadingComponent>
+            BulSU Plagiarism and Grammar Checker
+          </TextHeadingComponent>
           <Image source={bulsu_logo} style={styles.bulsuLogoStyle} />
         </View>
 
@@ -118,7 +127,12 @@ class AuthScreen extends Component {
           icon="ios-lock"
         />
 
-        <ButtonComponent onPress={this.loginHandler}>Sign In</ButtonComponent>
+        <ButtonComponent
+          onPress={this.loginHandler}
+          disabledButton={this.state.disableButton}
+        >
+          Sign In
+        </ButtonComponent>
       </View>
     );
   }

@@ -10,17 +10,21 @@ import HomeScreen from "./ScreensUI/TabScreens/HomeScreen";
 import ScannerScreen from "./ScreensUI/TabScreens/ScannerScreen";
 import PersonScreen from "./ScreensUI/TabScreens/PersonScreen";
 
-import CollegeListScreen from "./ScreensUI/TabScreens/Dashboard/CollegeListScreen";
-import AddCollegeScreen from "./ScreensUI/TabScreens/Dashboard/AddCollegeScreen";
-import AddCourseScreen from "./ScreensUI/TabScreens/Dashboard/AddCourseScreen";
-import EditCollegeScreen from "./ScreensUI/TabScreens/Dashboard/EditCollegeScreen";
-import CollegeDetailsScreen from "./ScreensUI/TabScreens/Dashboard/CollegeDetailsScreen";
+// College Screens
+import CollegeDetailsScreen from "./ScreensUI/TabScreens/Dashboard/College/CollegeDetailsScreen";
+import CollegeListScreen from "./ScreensUI/TabScreens/Dashboard/College/CollegeListScreen";
+import AddCollegeScreen from "./ScreensUI/TabScreens/Dashboard/College/AddCollegeScreen";
+import EditCollegeScreen from "./ScreensUI/TabScreens/Dashboard/College/EditCollegeScreen";
+import AddCourseScreen from "./ScreensUI/TabScreens/Dashboard/College/AddCourseScreen";
+import EditCourseScreen from "./ScreensUI/TabScreens/Dashboard/College/EditCourseScreen";
+// College Screens
 
-import ResearchesListScreen from "./ScreensUI/TabScreens/Dashboard/ResearchesListScreen";
-import ResearchDetailsScreen from "./ScreensUI/TabScreens/Dashboard/ResearchDetailsScreen";
-import AddResearchScreen from "./ScreensUI/TabScreens/Dashboard/AddResearchScreen";
-import EditResearchScreen from "./ScreensUI/TabScreens/Dashboard/EditResearchScreen";
-import AddAuthorScreen from "./ScreensUI/TabScreens/Dashboard/AddAuthorScreen";
+import ResearchesListScreen from "./ScreensUI/TabScreens/Dashboard/Research/ResearchesListScreen";
+import ResearchDetailsScreen from "./ScreensUI/TabScreens/Dashboard/Research/ResearchDetailsScreen";
+import AddResearchScreen from "./ScreensUI/TabScreens/Dashboard/Research/AddResearchScreen";
+import EditResearchScreen from "./ScreensUI/TabScreens/Dashboard/Research/EditResearchScreen";
+import PDFViewerScreen from "./ScreensUI/TabScreens/Dashboard/Research/PDFViewerScreen";
+import AddAuthorScreen from "./ScreensUI/TabScreens/Dashboard/Research/AddAuthorScreen";
 
 import SideDrawerScreen from "./ScreensUI/SideDrawer/SideDrawer";
 import startPrivateScreen from "./ScreensUI/startPrivateScreen";
@@ -92,6 +96,14 @@ Navigation.registerComponent(
   store,
   Provider
 );
+
+Navigation.registerComponent(
+  "Client.EditCourseScreen",
+  () => EditCourseScreen,
+  store,
+  Provider
+);
+
 //College Screens
 
 //Research Screens
@@ -129,6 +141,13 @@ Navigation.registerComponent(
   store,
   Provider
 );
+Navigation.registerComponent(
+  "Client.PDFViewerScreen",
+  () => PDFViewerScreen,
+  store,
+  Provider
+);
+
 //Research Screens
 
 AsyncStorage.getItem("x-auth").then(token => {

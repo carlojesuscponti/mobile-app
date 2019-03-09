@@ -2,15 +2,15 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, Image, Button, Alert } from "react-native";
 import { ColorPicker, fromHsv } from "react-native-color-picker";
 
-import InputComponent from "../../../Components/Input/InputComponent";
-import ButtonComponent from "../../../Components/Button/ButtonComponent";
+import InputComponent from "../../../../Components/Input/InputComponent";
+import ButtonComponent from "../../../../Components/Button/ButtonComponent";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import {
   createCollege,
   getColleges
-} from "../../../store/actions/collegeAction";
+} from "../../../../store/actions/collegeAction";
 
 class EditCollegeScreen extends Component {
   static navigatorStyle = {
@@ -44,9 +44,15 @@ class EditCollegeScreen extends Component {
       this.setState({
         submitCtr: 0
       });
-    }
-
-    if (
+    } else if (
+      nextProps.errors.fullName === "College Name is required" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "College Name is required!");
+      this.setState({
+        submitCtr: 0
+      });
+    } else if (
       nextProps.errors.initials === "College Initials already exists" &&
       this.state.submitCtr === 1
     ) {
@@ -54,11 +60,26 @@ class EditCollegeScreen extends Component {
       this.setState({
         submitCtr: 0
       });
-    }
-
-    if (
+    } else if (
+      nextProps.errors.initials === "College Initials is required" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "College Initials is required!");
+      this.setState({
+        submitCtr: 0
+      });
+    } else if (
+      nextProps.errors.librarian === "College librarian is required" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "College librarian is required!");
+      this.setState({
+        submitCtr: 0
+      });
+    } else if (
       nextProps.errors.fullName === undefined &&
       nextProps.errors.initials === undefined &&
+      nextProps.errors.librarian === undefined &&
       this.state.submitCtr === 1
     ) {
       this.setState({
@@ -114,13 +135,6 @@ class EditCollegeScreen extends Component {
         "Message",
         "Are you sure?",
         [
-          {
-            text: "Cancel",
-            onPress: () => {
-              this.props.navigator.pop();
-            },
-            style: "cancel"
-          },
           {
             text: "NO",
             onPress: () => {},

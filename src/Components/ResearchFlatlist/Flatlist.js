@@ -11,6 +11,8 @@ const flatList = props => {
       renderItem={info => (
         <ListItem
           researchesName={info.item.title}
+          researchesCollege={info.item.college}
+          researchesCourse={info.item.course}
           onItemPressed={() => props.onItemSelected(info.item._id)}
         />
       )}

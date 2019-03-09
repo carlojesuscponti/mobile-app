@@ -9,7 +9,7 @@ import startAuthScreen from "../../ScreensUI/startAuthScreen";
 export const loginUser = userData => dispatch => {
   console.log(userData);
   axios
-    .post("https://capstong.herokuapp.com/api/users/login", userData)
+    .post("http://capstong.herokuapp.com/api/users/login", userData)
     .then(res => {
       // Save to Local storage
       const { token } = res.data;

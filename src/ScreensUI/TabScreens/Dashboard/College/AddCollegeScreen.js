@@ -10,13 +10,13 @@ import {
 } from "react-native";
 import { ColorPicker, fromHsv } from "react-native-color-picker";
 
-import InputComponent from "../../../Components/Input/InputComponent";
-import ButtonComponent from "../../../Components/Button/ButtonComponent";
+import InputComponent from "../../../../Components/Input/InputComponent";
+import ButtonComponent from "../../../../Components/Button/ButtonComponent";
 import ImagePicker from "react-native-image-picker";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { createCollege } from "../../../store/actions/collegeAction";
+import { createCollege } from "../../../../store/actions/collegeAction";
 
 class AddCollegeScreen extends Component {
   static navigatorStyle = {
@@ -51,6 +51,16 @@ class AddCollegeScreen extends Component {
     }
 
     if (
+      nextProps.errors.fullName === "College Name is required" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "College Name is required!");
+      this.setState({
+        submitCtr: 0
+      });
+    }
+
+    if (
       nextProps.errors.initials === "College Initials already exists" &&
       this.state.submitCtr === 1
     ) {
@@ -61,8 +71,29 @@ class AddCollegeScreen extends Component {
     }
 
     if (
+      nextProps.errors.initials === "College Initials is required" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "College Initials is required!");
+      this.setState({
+        submitCtr: 0
+      });
+    }
+
+    if (
+      nextProps.errors.librarian === "College librarian is required" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "College librarian is required!");
+      this.setState({
+        submitCtr: 0
+      });
+    }
+
+    if (
       nextProps.errors.fullName === undefined &&
       nextProps.errors.initials === undefined &&
+      nextProps.errors.librarian === undefined &&
       this.state.submitCtr === 1
     ) {
       this.setState({
@@ -108,15 +139,8 @@ class AddCollegeScreen extends Component {
 
       Alert.alert(
         "Message",
-        "Are you sure?",
+        "Are you sure you want to save?",
         [
-          {
-            text: "Cancel",
-            onPress: () => {
-              this.props.navigator.pop();
-            },
-            style: "cancel"
-          },
           {
             text: "NO",
             onPress: () => {},
@@ -176,7 +200,6 @@ class AddCollegeScreen extends Component {
   };
 
   render() {
-    const { errors } = this.props;
     return (
       <View style={styles.container}>
         <Text style={{ fontSize: 18, fontWeight: "bold", color: "red" }}>

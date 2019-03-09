@@ -75,6 +75,12 @@
 		815D0B6A8AC84E15B41021BB /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D3ADF5791AF644189360C83F /* Zocial.ttf */; };
 		3BEF30A5D18244A0AF0F8506 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E86E0F85D8D4EAEBE9FA62C /* libRNImagePicker.a */; };
 		90B71FC9622647D8BD7C2DA4 /* libReact-Native-Webview-Bridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E78658D71004B8CB9E73DC8 /* libReact-Native-Webview-Bridge.a */; };
+		285FD6B98672443BA5BD573B /* libReactNativeViewPDF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B0C0A1FBA6EF4FD4A4E0CFEB /* libReactNativeViewPDF.a */; };
+		DC94655EC857421CBE6DF6A2 /* libRNFileSelector.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E29728BF301F4EC2A4FB7200 /* libRNFileSelector.a */; };
+		AE2531FE3A0A41669D6B683A /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9838E4ED750F49B4B18976BF /* libRNFetchBlob.a */; };
+		88605CB25ECD4D7EA2D8092F /* libRNHTMLtoPDF.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F29C2867D1834DCEB4F23AF7 /* libRNHTMLtoPDF.a */; };
+		67E08F0AAAEA49F0BD83550A /* RNHTMLtoPDFTests.xctest in Resources */ = {isa = PBXBuildFile; fileRef = D403AC9F808B49C0AA8419CA /* RNHTMLtoPDFTests.xctest */; };
+		1D2D8DFC56B342B88473844A /* libRNDocumentPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 056CDD8F160D4FEB883C98A3 /* libRNDocumentPicker.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -422,6 +428,17 @@
 		7E86E0F85D8D4EAEBE9FA62C /* libRNImagePicker.a */ = {isa = PBXFileReference; name = "libRNImagePicker.a"; path = "libRNImagePicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		434F062EAD0B4CB0897FA2C9 /* React-Native-Webview-Bridge.xcodeproj */ = {isa = PBXFileReference; name = "React-Native-Webview-Bridge.xcodeproj"; path = "../node_modules/react-native-webview-bridge/ios/React-Native-Webview-Bridge.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		9E78658D71004B8CB9E73DC8 /* libReact-Native-Webview-Bridge.a */ = {isa = PBXFileReference; name = "libReact-Native-Webview-Bridge.a"; path = "libReact-Native-Webview-Bridge.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		DFCE00E2C1D24405918AF3AE /* ReactNativeViewPDF.xcodeproj */ = {isa = PBXFileReference; name = "ReactNativeViewPDF.xcodeproj"; path = "../node_modules/react-native-view-pdf/ReactNativeViewPDF.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		B0C0A1FBA6EF4FD4A4E0CFEB /* libReactNativeViewPDF.a */ = {isa = PBXFileReference; name = "libReactNativeViewPDF.a"; path = "libReactNativeViewPDF.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		24ECBA9FE4C0460B949B51C1 /* RNFileSelector.xcodeproj */ = {isa = PBXFileReference; name = "RNFileSelector.xcodeproj"; path = "../node_modules/react-native-file-selector/ios/RNFileSelector.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		E29728BF301F4EC2A4FB7200 /* libRNFileSelector.a */ = {isa = PBXFileReference; name = "libRNFileSelector.a"; path = "libRNFileSelector.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		657C311B22B44DDFBEDA1EFF /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; name = "RNFetchBlob.xcodeproj"; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		9838E4ED750F49B4B18976BF /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		BDE66208230247E58C2D4F9C /* RNHTMLtoPDF.xcodeproj */ = {isa = PBXFileReference; name = "RNHTMLtoPDF.xcodeproj"; path = "../node_modules/react-native-html-to-pdf/ios/RNHTMLtoPDF.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		F29C2867D1834DCEB4F23AF7 /* libRNHTMLtoPDF.a */ = {isa = PBXFileReference; name = "libRNHTMLtoPDF.a"; path = "libRNHTMLtoPDF.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		D403AC9F808B49C0AA8419CA /* RNHTMLtoPDFTests.xctest */ = {isa = PBXFileReference; name = "RNHTMLtoPDFTests.xctest"; path = "RNHTMLtoPDFTests.xctest"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.cfbundle; explicitFileType = undefined; includeInIndex = 0; };
+		F5429BEE0EFA48A0A43CC933 /* RNDocumentPicker.xcodeproj */ = {isa = PBXFileReference; name = "RNDocumentPicker.xcodeproj"; path = "../node_modules/react-native-document-picker/ios/RNDocumentPicker.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		056CDD8F160D4FEB883C98A3 /* libRNDocumentPicker.a */ = {isa = PBXFileReference; name = "libRNDocumentPicker.a"; path = "libRNDocumentPicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -453,6 +470,12 @@
 				57323BA5BBAD4AD9A1A96904 /* libReactNativeNavigation.a in Frameworks */,
 				3BEF30A5D18244A0AF0F8506 /* libRNImagePicker.a in Frameworks */,
 				90B71FC9622647D8BD7C2DA4 /* libReact-Native-Webview-Bridge.a in Frameworks */,
+				285FD6B98672443BA5BD573B /* libReactNativeViewPDF.a in Frameworks */,
+				DC94655EC857421CBE6DF6A2 /* libRNFileSelector.a in Frameworks */,
+				AE2531FE3A0A41669D6B683A /* libRNFetchBlob.a in Frameworks */,
+				88605CB25ECD4D7EA2D8092F /* libRNHTMLtoPDF.a in Frameworks */,
+				67E08F0AAAEA49F0BD83550A /* RNHTMLtoPDFTests.xctest in Resources */,
+				1D2D8DFC56B342B88473844A /* libRNDocumentPicker.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -644,6 +667,11 @@
 				37B024140B174616B2E236D9 /* ReactNativeNavigation.xcodeproj */,
 				B27A01E1026C4CEDB80D654A /* RNImagePicker.xcodeproj */,
 				434F062EAD0B4CB0897FA2C9 /* React-Native-Webview-Bridge.xcodeproj */,
+				DFCE00E2C1D24405918AF3AE /* ReactNativeViewPDF.xcodeproj */,
+				24ECBA9FE4C0460B949B51C1 /* RNFileSelector.xcodeproj */,
+				657C311B22B44DDFBEDA1EFF /* RNFetchBlob.xcodeproj */,
+				BDE66208230247E58C2D4F9C /* RNHTMLtoPDF.xcodeproj */,
+				F5429BEE0EFA48A0A43CC933 /* RNDocumentPicker.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1350,7 +1378,6 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1358,6 +1385,11 @@
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
 					"$(SRCROOT)\..\node_modules\react-native-webview-bridge\ios",
+					"$(SRCROOT)\..\node_modules\react-native-view-pdf\ReactNativeViewPDF",
+					"$(SRCROOT)\..\node_modules\react-native-file-selector\ios",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-html-to-pdf\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 				);
 			};
 			name = Debug;
@@ -1383,7 +1415,6 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1391,6 +1422,11 @@
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
 					"$(SRCROOT)\..\node_modules\react-native-webview-bridge\ios",
+					"$(SRCROOT)\..\node_modules\react-native-view-pdf\ReactNativeViewPDF",
+					"$(SRCROOT)\..\node_modules\react-native-file-selector\ios",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-html-to-pdf\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 				);
 			};
 			name = Release;
@@ -1417,6 +1453,11 @@
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
 					"$(SRCROOT)\..\node_modules\react-native-webview-bridge\ios",
+					"$(SRCROOT)\..\node_modules\react-native-view-pdf\ReactNativeViewPDF",
+					"$(SRCROOT)\..\node_modules\react-native-file-selector\ios",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-html-to-pdf\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 				);
 			};
 			name = Debug;
@@ -1442,6 +1483,11 @@
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
 					"$(SRCROOT)\..\node_modules\react-native-webview-bridge\ios",
+					"$(SRCROOT)\..\node_modules\react-native-view-pdf\ReactNativeViewPDF",
+					"$(SRCROOT)\..\node_modules\react-native-file-selector\ios",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-html-to-pdf\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 				);
 			};
 			name = Release;
@@ -1475,7 +1521,6 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1483,6 +1528,11 @@
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
 					"$(SRCROOT)\..\node_modules\react-native-webview-bridge\ios",
+					"$(SRCROOT)\..\node_modules\react-native-view-pdf\ReactNativeViewPDF",
+					"$(SRCROOT)\..\node_modules\react-native-file-selector\ios",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-html-to-pdf\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 				);
 			};
 			name = Debug;
@@ -1516,7 +1566,6 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1524,6 +1573,11 @@
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
 					"$(SRCROOT)\..\node_modules\react-native-webview-bridge\ios",
+					"$(SRCROOT)\..\node_modules\react-native-view-pdf\ReactNativeViewPDF",
+					"$(SRCROOT)\..\node_modules\react-native-file-selector\ios",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-html-to-pdf\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 				);
 			};
 			name = Release;
@@ -1556,7 +1610,6 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1564,6 +1617,11 @@
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
 					"$(SRCROOT)\..\node_modules\react-native-webview-bridge\ios",
+					"$(SRCROOT)\..\node_modules\react-native-view-pdf\ReactNativeViewPDF",
+					"$(SRCROOT)\..\node_modules\react-native-file-selector\ios",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-html-to-pdf\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 				);
 			};
 			name = Debug;
@@ -1596,7 +1654,6 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1604,6 +1661,11 @@
 					"$(SRCROOT)\..\node_modules\react-native-navigation\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
 					"$(SRCROOT)\..\node_modules\react-native-webview-bridge\ios",
+					"$(SRCROOT)\..\node_modules\react-native-view-pdf\ReactNativeViewPDF",
+					"$(SRCROOT)\..\node_modules\react-native-file-selector\ios",
+					"$(SRCROOT)\..\node_modules\react-native-fetch-blob\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-html-to-pdf\ios/**",
+					"$(SRCROOT)\..\node_modules\react-native-document-picker\ios\RNDocumentPicker",
 				);
 			};
 			name = Release;

@@ -16,7 +16,6 @@ import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-//import { getColleges } from "../../store/actions/collegeAction";
 
 class HomeScreen extends Component {
   static navigatorStyle = {
@@ -26,6 +25,9 @@ class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+    this.state = {
+      buttonClicked: false
+    };
   }
 
   onNavigatorEvent = event => {
@@ -42,9 +44,6 @@ class HomeScreen extends Component {
     this.props.navigator.push({
       screen: "Client.CollegeListScreen",
       title: "List of Colleges"
-      // passProps: {
-      //   collegeInfo: collegeData
-      // }
     });
   };
 
@@ -56,21 +55,6 @@ class HomeScreen extends Component {
   };
 
   render() {
-    // const { colleges, loading } = this.props.college;
-    // let collegeItems;
-
-    // if (colleges === null || loading) {
-    //   collegeItems = (
-    //     <View
-    //       style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-    //     >
-    //       <ActivityIndicator />
-    //     </View>
-    //   );
-    // } else {
-    //   collegeItems = <View />;
-    // }
-
     return (
       <View style={styles.container}>
         <ScrollView

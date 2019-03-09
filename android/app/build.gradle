@@ -78,10 +78,10 @@ project.ext.react = [
 
 apply from: "../../node_modules/react-native/react.gradle"
 
-// project.afterEvaluate {
-//     apply from: '../../node_modules/react-native-zss-rich-text-editor/htmlCopy.gradle';
-//     copyEditorHtmlToAppAssets(file('../../node_modules/react-native-zss-rich-text-editor'))
-// }
+project.afterEvaluate {
+    apply from: '../../node_modules/react-native-zss-rich-text-editor/htmlCopy.gradle';
+    copyEditorHtmlToAppAssets(file('../../node_modules/react-native-zss-rich-text-editor'))
+}
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -142,10 +142,14 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-fetch-blob')
+    compile project(':react-native-file-selector')
+    compile project(':react-native-view-pdf')
     compile project(':react-native-vector-icons')
     compile project(':react-native-navigation')
     compile project(':react-native-image-picker')
     compile project(':react-native-file-picker')
+    compile project(':react-native-document-picker')
     compile project(':react-native-webview-bridge')
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     compile 'com.android.support:design:27.1.0'

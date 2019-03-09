@@ -3,9 +3,13 @@ package com.bulsupc;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import ui.fileselector.RNFileSelectorPackage;
+import com.rumax.reactnative.pdfviewer.PDFViewPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.filepicker.FilePickerPackage;
 import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
+import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 //import com.reactnativenavigation.bridge.NavigationReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
@@ -30,7 +34,11 @@ public class MainApplication extends NavigationApplication {
           new VectorIconsPackage(),
 					new ImagePickerPackage(),
 					new FilePickerPackage(),
-					new WebViewBridgePackage() 
+					new WebViewBridgePackage(),
+					new PDFViewPackage(),
+					new ReactNativeDocumentPicker(),
+					new RNFileSelectorPackage(),
+					new RNFetchBlobPackage()
       );
     }
 
