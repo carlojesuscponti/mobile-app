@@ -3,14 +3,13 @@ package com.bulsupc;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.horcrux.svg.SvgPackage;
+import com.yonahforst.rnpermissions.RNPermissionsPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
-import ui.fileselector.RNFileSelectorPackage;
 import com.rumax.reactnative.pdfviewer.PDFViewPackage;
 import com.imagepicker.ImagePickerPackage;
-import com.filepicker.FilePickerPackage;
 import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
-//import com.reactnativenavigation.bridge.NavigationReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -33,12 +32,12 @@ public class MainApplication extends NavigationApplication {
 		return Arrays.<ReactPackage>asList(
           new VectorIconsPackage(),
 					new ImagePickerPackage(),
-					new FilePickerPackage(),
 					new WebViewBridgePackage(),
 					new PDFViewPackage(),
 					new ReactNativeDocumentPicker(),
-					new RNFileSelectorPackage(),
-					new RNFetchBlobPackage()
+					new RNFetchBlobPackage(),
+					new RNPermissionsPackage(),
+					new SvgPackage()
       );
     }
 

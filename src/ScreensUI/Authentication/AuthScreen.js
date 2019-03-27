@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import { loginUser } from "../../store/actions/authActions";
 import bulsu_logo from "../../Pictures/bulsu_red_logo.png";
 import privateTabScreen from "../startPrivateScreen";
+import landingPage from "../SideDrawer/landingPage";
 import InputComponent from "../../Components/Input/InputComponent";
 import ButtonComponent from "../../Components/Button/ButtonComponent";
 import TextComponent from "../../Components/Text/TextButton";
@@ -37,18 +38,18 @@ class AuthScreen extends Component {
 
   componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      privateTabScreen();
+      landingPage();
     }
   }
   componentWillMount() {
     if (this.props.auth.isAuthenticated) {
-      privateTabScreen();
+      landingPage();
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
-      privateTabScreen();
+      landingPage();
     }
 
     if (nextProps.errors.username === "User not found!") {

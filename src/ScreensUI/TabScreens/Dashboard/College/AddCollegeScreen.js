@@ -1,22 +1,12 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Button,
-  Alert,
-  AsyncStorage
-} from "react-native";
+import { View, Text, StyleSheet, Image, Button, Alert } from "react-native";
+import { connect } from "react-redux";
+import { createCollege } from "../../../../store/actions/collegeAction";
 import { ColorPicker, fromHsv } from "react-native-color-picker";
-
+import PropTypes from "prop-types";
 import InputComponent from "../../../../Components/Input/InputComponent";
 import ButtonComponent from "../../../../Components/Button/ButtonComponent";
 import ImagePicker from "react-native-image-picker";
-
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { createCollege } from "../../../../store/actions/collegeAction";
 
 class AddCollegeScreen extends Component {
   static navigatorStyle = {
@@ -122,6 +112,12 @@ class AddCollegeScreen extends Component {
     } else {
       const logo = this.state.logo;
       const logoname = logo.replace(/^.*\\/, "");
+      const name =
+        this.props.auth.user.firstName +
+        " " +
+        this.props.auth.user.middleName +
+        " " +
+        this.props.auth.user.lastName;
 
       const collegeData = {
         fullName: this.state.fullName,
@@ -131,10 +127,10 @@ class AddCollegeScreen extends Component {
             .split(".")
             .slice(0, -1)
             .join(".") + Date.now(),
-        ext: logoname.split(".").pop(),
         librarian: this.state.librarian,
         file: this.state.selectedFile,
-        color: this.state.background
+        color: this.state.background,
+        username: name
       };
 
       Alert.alert(
@@ -274,7 +270,8 @@ AddCollegeScreen.propTypes = {
 
 const mapStateToProps = state => ({
   college: state.college,
-  errors: state.errors
+  errors: state.errors,
+  auth: state.auth
 });
 
 export default connect(

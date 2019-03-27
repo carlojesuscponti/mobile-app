@@ -1,13 +1,17 @@
 import {
   GET_RESEARCH,
   GET_RESEARCHES,
-  RESEARCH_LOADING
+  RESEARCH_LOADING,
+  CHANGE_BUTTON_STATUS_RESEARCH,
+  CHANGE_STATUS_RESEARCH
 } from "../actions/types";
 
 const initialState = {
   research: {},
   researches: {},
-  loading: false
+  loading: false,
+  changeStatus: false,
+  buttonDisable: false
 };
 
 export default function(state = initialState, action) {
@@ -29,6 +33,19 @@ export default function(state = initialState, action) {
         researches: action.payload,
         loading: false
       };
+
+    case CHANGE_BUTTON_STATUS_RESEARCH:
+      return {
+        ...state,
+        buttonDisable: action.payload
+      };
+
+    case CHANGE_STATUS_RESEARCH:
+      return {
+        ...state,
+        changeStatus: action.payload
+      };
+
     default:
       return state;
   }

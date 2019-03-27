@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import { addCourse } from "../../../../store/actions/collegeAction";
 import InputComponent from "../../../../Components/Input/InputComponent";
 import ButtonComponent from "../../../../Components/Button/ButtonComponent";
-import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 
 class AddCourseScreen extends Component {
   static navigatorStyle = {
@@ -30,7 +29,8 @@ class AddCourseScreen extends Component {
       this.setState({
         submitCtr: 0
       });
-    } else if (
+    }
+    if (
       nextProps.errors.initials === "Course Initials is required" &&
       this.state.submitCtr === 1
     ) {
@@ -38,7 +38,8 @@ class AddCourseScreen extends Component {
       this.setState({
         submitCtr: 0
       });
-    } else if (
+    }
+    if (
       nextProps.errors.initials === "Course Initials already exists" &&
       this.state.submitCtr === 1
     ) {
@@ -46,7 +47,8 @@ class AddCourseScreen extends Component {
       this.setState({
         submitCtr: 0
       });
-    } else if (
+    }
+    if (
       nextProps.errors.name === undefined &&
       nextProps.errors.initials === undefined &&
       this.state.submitCtr === 1
@@ -63,11 +65,19 @@ class AddCourseScreen extends Component {
     if (name === "" || initials === "") {
       Alert.alert("Warning", "Fill up the fields!");
     } else {
+      const uname =
+        this.props.auth.user.firstName +
+        " " +
+        this.props.auth.user.middleName +
+        " " +
+        this.props.auth.user.lastName;
+
       const courseData = {
         name: this.state.name,
         initials: this.state.initials,
         colId: this.props.collegeData._id,
-        college: this.props.collegeData
+        college: this.props.collegeData,
+        username: uname
       };
 
       Alert.alert(
@@ -86,7 +96,6 @@ class AddCourseScreen extends Component {
               this.setState({
                 submitCtr: 1
               });
-              // this.props.navigator.pop();
             }
           }
         ],
@@ -135,12 +144,14 @@ const styles = StyleSheet.create({
 AddCourseScreen.propTypes = {
   errors: PropTypes.object.isRequired,
   addCourse: PropTypes.func.isRequired,
-  college: PropTypes.object.isRequired
+  college: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   errors: state.errors,
-  college: state.college
+  college: state.college,
+  auth: state.auth
 });
 
 export default connect(

@@ -7,9 +7,9 @@ import startAuthScreen from "../../ScreensUI/startAuthScreen";
 
 // Login - Get User Token
 export const loginUser = userData => dispatch => {
-  console.log(userData);
+  dispatch(clearErrors());
   axios
-    .post("http://capstong.herokuapp.com/api/users/login", userData)
+    .post("http://34.229.6.94/api/users/login", userData)
     .then(res => {
       // Save to Local storage
       const { token } = res.data;
@@ -23,12 +23,13 @@ export const loginUser = userData => dispatch => {
       dispatch(setCurrentUser(decoded));
       //console.log(res.data.token);
     })
-    .catch(err =>
+    .catch(err => {
+      //alert(JSON.stringify(err));
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      })
-    );
+      });
+    });
 };
 // set Logged in user
 export const setCurrentUser = decoded => {
@@ -53,5 +54,12 @@ export const logoutUser = () => dispatch => {
 export const clearCurrentProfile = () => {
   return {
     type: CLEAR_CURRENT_PROFILE
+  };
+};
+
+// Clear errors
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
   };
 };

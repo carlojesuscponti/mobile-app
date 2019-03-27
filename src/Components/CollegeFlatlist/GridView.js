@@ -8,6 +8,7 @@ import {
   Dimensions
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { BadgeActive, BadgeDeleted } from "../Button/buttons";
 
 const gridViewItem = props => {
   return (
@@ -22,21 +23,29 @@ const gridViewItem = props => {
         <View
           style={[
             styles.GridViewContainer,
-            { width: props.itemWidth / 2 - 20 }
+            {
+              width: props.itemWidth / 2 - 20
+            }
           ]}
         >
-          <View
-            style={{
-              width: 50,
-              height: 50,
-              borderRadius: 100,
-              backgroundColor: "red"
-            }}
-          />
-          <View style={{ height: 70 }}>
+          <View style={{ width: 110, marginTop: 15 }}>
+            <Image
+              resizeMode="cover"
+              source={{ uri: props.collegeImage }}
+              style={styles.collegeImage}
+            />
+          </View>
+
+          <View style={{ alignItems: "center" }}>
             <Text style={{ fontSize: 16, color: "black", textAlign: "center" }}>
               {props.collegeName}
             </Text>
+            <Text style={{ fontSize: 18, color: "black", textAlign: "center" }}>
+              {props.collegeInitials}
+            </Text>
+            <View style={{ marginBottom: 15 }}>
+              {props.status === 0 ? <BadgeActive /> : <BadgeDeleted />}
+            </View>
           </View>
         </View>
       </View>
@@ -49,12 +58,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    height: 150,
+    minHeight: 150,
     margin: 5,
     backgroundColor: "#f8f9fa",
     borderRadius: 5,
     borderColor: "#808080",
     borderWidth: 1
+  },
+
+  collegeImage: {
+    borderRadius: 100,
+    marginRight: 8,
+    height: 100,
+    width: 100
   }
 });
 

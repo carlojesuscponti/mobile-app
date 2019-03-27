@@ -1,24 +1,180 @@
-import axios from "axios";
-
 import {
   GET_RESEARCH,
   GET_RESEARCHES,
   RESEARCH_LOADING,
   GET_ERRORS,
-  CLEAR_ERRORS
+  CLEAR_ERRORS,
+  CHANGE_BUTTON_STATUS_RESEARCH,
+  CHANGE_STATUS_RESEARCH
 } from "./types";
+import { getColleges } from "../actions/collegeAction";
+import axios from "axios";
+import RNFetchBlob from "react-native-fetch-blob";
+const { config, fs } = RNFetchBlob;
+import { AsyncStorage } from "react-native";
 
 // Get all researches
 export const getResearches = () => dispatch => {
   dispatch(clearErrors());
   dispatch(setResearchLoading());
+  dispatch(changeStatus(true));
   axios
-    .get("http://capstong.herokuapp.com/api/researches")
-    .then(res =>
+    .get("http://34.229.6.94/api/researches")
+    .then(res => {
+      // AsyncStorage.removeItem("objects")
+      //   .then(res => {
+      //     alert(JSON.stringify(res));
+      //   })
+      //   .catch(() => {
+      //     alert("There was an error saving the product");
+      //   });
+
+      AsyncStorage.getItem("offlineResearches")
+        .then(() => {
+          AsyncStorage.setItem(
+            "offlineResearches",
+            JSON.stringify(res.data)
+          ).then(() => {
+            //alert("It was saved successfully");
+          });
+        })
+        .catch(() => {
+          alert("There was an error saving the product");
+        });
+      dispatch(changeStatus(false));
       dispatch({
         type: GET_RESEARCHES,
         payload: res.data
+      });
+    })
+    .catch(err => {
+      //alert(JSON.stringify(err));
+      dispatch(changeStatus(false));
+      dispatch({
+        type: GET_RESEARCHES,
+        payload: null
+      });
+    });
+};
+
+// Create Report for specific Research
+export const createReportForResearch = reportData => dispatch => {
+  dispatch(changeButtonStatus(true));
+  axios
+    .post("http://34.229.6.94/api/researches/createReport/research", reportData)
+    .then(() =>
+      axios
+        .get("http://34.229.6.94/api/researches/fetchReport/research", {
+          responseType: "blob"
+        })
+        .then(res => {
+          const pdfBlob = new Blob([res.data], { type: "application/pdf" });
+
+          // send base64 to api for s3 upload -FOR ANDROID-
+          if (reportData.android) {
+            const reader = new FileReader();
+            reader.readAsDataURL(pdfBlob);
+            reader.onloadend = function() {
+              const pdfData = {
+                base64: reader.result
+              };
+
+              axios
+                .post(
+                  "http://34.229.6.94/api/colleges/uploadS3/android",
+                  pdfData
+                )
+                .then(() => {})
+                .catch(err => {
+                  console.log(JSON.stringify(err));
+                  let DownloadDir = fs.dirs.DownloadDir;
+                  RNFetchBlob.config({
+                    fileCache: true,
+                    appendExt: "pdf",
+                    addAndroidDownloads: {
+                      useDownloadManager: true,
+                      notification: false,
+                      path: DownloadDir + "/ResearchReport.pdf",
+                      description: "Downloading PDF."
+                    }
+                  })
+                    .fetch(
+                      "GET",
+                      "http://s3-ap-southeast-1.amazonaws.com/bulsu-capstone/androidReport/generatedReport.pdf"
+                    )
+                    .then(res => {
+                      dispatch(changeButtonStatus(false));
+                      console.log(JSON.stringify(res));
+                    });
+                });
+            };
+          }
+        })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_RESEARCHES,
+        payload: null
       })
+    );
+};
+
+// Create Report for all Researches
+export const createReportForResearches = reportData => dispatch => {
+  dispatch(changeButtonStatus(true));
+  axios
+    .post(
+      "http://34.229.6.94/api/researches/createReport/researches",
+      reportData
+    )
+    .then(() =>
+      axios
+        .get("http://34.229.6.94/api/researches/fetchReport/researches", {
+          responseType: "blob"
+        })
+        .then(res => {
+          const pdfBlob = new Blob([res.data], { type: "application/pdf" });
+
+          // send base64 to api for s3 upload -FOR ANDROID-
+          if (reportData.android) {
+            const reader = new FileReader();
+            reader.readAsDataURL(pdfBlob);
+            reader.onloadend = function() {
+              const pdfData = {
+                base64: reader.result
+              };
+
+              axios
+                .post(
+                  "http://34.229.6.94/api/colleges/uploadS3/android",
+                  pdfData
+                )
+                .then(() => {})
+                .catch(err => {
+                  console.log(JSON.stringify(err));
+                  let DownloadDir = fs.dirs.DownloadDir;
+                  RNFetchBlob.config({
+                    fileCache: true,
+                    appendExt: "pdf",
+                    addAndroidDownloads: {
+                      useDownloadManager: true,
+                      notification: false,
+                      path: DownloadDir + "/ResearchesReport.pdf",
+                      description: "Downloading PDF."
+                    }
+                  })
+                    .fetch(
+                      "GET",
+                      "http://s3-ap-southeast-1.amazonaws.com/bulsu-capstone/androidReport/generatedReport.pdf"
+                    )
+                    .then(res => {
+                      dispatch(changeButtonStatus(false));
+                      console.log(JSON.stringify(res));
+                    });
+                });
+            };
+          }
+        })
     )
     .catch(err =>
       dispatch({
@@ -31,119 +187,132 @@ export const getResearches = () => dispatch => {
 // Create / Update Research
 export const createResearch = researchData => dispatch => {
   dispatch(clearErrors());
+  dispatch(changeStatus(true));
   axios
-    .post("http://capstong.herokuapp.com/api/researches", researchData)
+    .post("http://34.229.6.94/api/researches", researchData)
     .then(res => {
+      dispatch(changeStatus(false));
       dispatch(getResearches());
-      // if (researchData.id) {
-      //   history.push(`/researches/${researchData.id}`);
-      // } else {
-      //   history.push(`/researches`);
-      // }
+      dispatch(getColleges());
     })
-    .catch(err =>
+    .catch(err => {
+      dispatch(changeStatus(false));
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      })
-    );
+      });
+    });
 };
 
 // Delete Research
 export const deleteResearch = data => dispatch => {
-  dispatch(setResearchLoading());
+  dispatch(clearErrors());
+  //dispatch(changeStatus(true));
   axios
-    .post(`http://capstong.herokuapp.com/api/researches/remove/${data.id}`)
+    .post(`http://34.229.6.94/api/researches/remove/${data.id}`, data)
     .then(res => {
+      dispatch(changeStatus(false));
       dispatch(getResearches());
     })
-    .catch(err =>
+    .catch(err => {
+      dispatch(changeStatus(false));
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      })
-    );
+      });
+    });
 };
 
 // Delete Research
 export const restoreResearch = data => dispatch => {
-  dispatch(setResearchLoading());
+  dispatch(clearErrors());
+  //dispatch(changeStatus(true));
   axios
-    .post(`http://capstong.herokuapp.com/api/researches/restore/${data.id}`)
+    .post(`http://34.229.6.94/api/researches/restore/${data.id}`, data)
     .then(res => {
+      dispatch(changeStatus(false));
       dispatch(getResearches());
     })
-    .catch(err =>
+    .catch(err => {
+      dispatch(changeStatus(false));
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      })
-    );
+      });
+    });
 };
 
 // Add Author
 export const addAuthor = authorData => dispatch => {
   dispatch(clearErrors());
-  dispatch(setResearchLoading());
+  dispatch(changeStatus(true));
   axios
-    .post("http://capstong.herokuapp.com/api/researches/author", authorData)
+    .post("http://34.229.6.94/api/researches/author", authorData)
     .then(res => {
+      dispatch(changeStatus(false));
       dispatch(getResearches());
-      //history.push(`/researches/${authorData.researchId}`)
     })
-    .catch(err =>
+    .catch(err => {
+      dispatch(changeStatus(false));
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      })
-    );
+      });
+    });
 };
 
 // Delete Author
-export const deleteAuthor = (research, id) => dispatch => {
+export const deleteAuthor = (research, id, name) => dispatch => {
   dispatch(clearErrors());
-  dispatch(setResearchLoading());
+  dispatch(changeStatus(true));
   axios
     .delete(
-      `http://capstong.herokuapp.com/api/researches/author/${research}/${id}`
+      `http://34.229.6.94/api/researches/author/${research}/${id}/${name}`
     )
     .then(res => {
+      dispatch(changeStatus(false));
       dispatch(getResearches());
     })
-    .catch(err =>
+    .catch(err => {
+      dispatch(changeStatus(false));
       dispatch({
-        type: GET_RESEARCH,
+        type: GET_ERRORS,
         payload: err.response.data
-      })
-    );
+      });
+    });
 };
 
 // Add Document
 export const addDocument = docuData => dispatch => {
-  dispatch(setResearchLoading());
+  dispatch(clearErrors());
+  dispatch(changeStatus(true));
   axios
-    .post("http://capstong.herokuapp.com/api/researches/document", docuData)
+    .post("http://34.229.6.94/api/researches/document", docuData)
     .then(res => {
+      dispatch(changeStatus(false));
       dispatch(getResearches());
     })
-    .catch(err =>
+    .catch(err => {
+      dispatch(changeStatus(false));
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      })
-    );
+      });
+    });
 };
 
 // Add Images
 export const addImages = data => dispatch => {
   dispatch(clearErrors());
-  dispatch(setResearchLoading());
+  dispatch(changeStatus(true));
   axios
-    .post("http://capstong.herokuapp.com/api/researches/images", data)
+    .post("http://34.229.6.94/api/researches/images", data)
     .then(res => {
+      dispatch(changeStatus(false));
       dispatch(getResearches());
     })
     .catch(err => {
+      dispatch(changeStatus(false));
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
@@ -152,21 +321,38 @@ export const addImages = data => dispatch => {
 };
 
 // Delete Document
-export const deleteDocument = (researchId, filename) => dispatch => {
-  dispatch(setResearchLoading());
+export const deleteDocument = (researchId, filename, name) => dispatch => {
+  dispatch(clearErrors());
+  dispatch(changeStatus(true));
   axios
     .delete(
-      `http://capstong.herokuapp.com/api/researches/document/${researchId}/${filename}`
+      `http://34.229.6.94/api/researches/document/${researchId}/${filename}/${name}`
     )
     .then(res => {
+      dispatch(changeStatus(false));
       dispatch(getResearches());
     })
-    .catch(err =>
+    .catch(err => {
+      dispatch(changeStatus(false));
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      })
-    );
+      });
+    });
+};
+
+export const changeButtonStatus = flag => {
+  return {
+    type: CHANGE_BUTTON_STATUS_RESEARCH,
+    payload: flag
+  };
+};
+
+export const changeStatus = flag => {
+  return {
+    type: CHANGE_STATUS_RESEARCH,
+    payload: flag
+  };
 };
 
 // set loading state
@@ -182,20 +368,3 @@ export const clearErrors = () => {
     type: CLEAR_ERRORS
   };
 };
-
-/*
-      history.push("/researches"),
-      history.push(`/researches/${data.id}`),
-
-      window.location.reload(),
-      dispatch(
-        {
-          type: GET_RESEARCHES,
-          payload: res.data
-        },
-        {
-          type: GET_RESEARCH,
-          payload: res.data
-        }
-      )
-*/

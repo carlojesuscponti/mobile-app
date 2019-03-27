@@ -1,9 +1,17 @@
-import { GET_COLLEGE, GET_COLLEGES, COLLEGE_LOADING } from "../actions/types";
+import {
+  GET_COLLEGE,
+  GET_COLLEGES,
+  COLLEGE_LOADING,
+  CHANGE_BUTTON_STATUS_COLLEGE,
+  CHANGE_STATUS_COLLEGE
+} from "../actions/types";
 
 const initialState = {
   college: {},
   colleges: {},
-  loading: false
+  loading: false,
+  changeStatus: false,
+  buttonDisable: false
 };
 
 export default function(state = initialState, action) {
@@ -28,6 +36,17 @@ export default function(state = initialState, action) {
         loading: false
       };
 
+    case CHANGE_BUTTON_STATUS_COLLEGE:
+      return {
+        ...state,
+        buttonDisable: action.payload
+      };
+
+    case CHANGE_STATUS_COLLEGE:
+      return {
+        ...state,
+        changeStatus: action.payload
+      };
     default:
       return state;
   }

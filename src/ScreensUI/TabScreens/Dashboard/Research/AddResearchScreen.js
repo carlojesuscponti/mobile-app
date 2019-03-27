@@ -2,33 +2,26 @@ import React, { Component } from "react";
 import {
   View,
   StyleSheet,
-  Keyboard,
-  TouchableWithoutFeedback,
   Text,
-  KeyboardAvoidingView,
   Picker,
   ScrollView,
-  Alert
+  Alert,
+  TextInput,
+  WebView,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  TouchableOpacity
 } from "react-native";
 
-import CNRichTextEditor, {
-  CNToolbar,
-  getInitialObject,
-  getDefaultStyles,
-  convertToHtmlString
-} from "react-native-cn-richtext-editor";
-
-import InputComponent from "../../../../Components/Input/InputComponent";
+import InputText from "../../../../Components/Input/InputText";
 import ButtonComponent from "../../../../Components/Button/ButtonComponent";
 import RadioGroup from "react-native-radio-buttons-group";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
 import { getColleges } from "../../../../store/actions/collegeAction";
 import { createResearch } from "../../../../store/actions/researchActions";
-
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-const defaultStyles = getDefaultStyles();
+import Spinner from "../../../../Components/Spinner/Spinner";
 
 class AddResearchScreen extends Component {
   static navigatorStyle = {
@@ -39,35 +32,51 @@ class AddResearchScreen extends Component {
     super(props);
     this.state = {
       title: "",
-      type: "Thesis",
+      type: "thesis",
       college: "",
       course: "",
       abstract: "",
       schoolyear: "",
       pages: "",
+      researchId: "",
+      authorOne: "",
       submitCtr: 0,
-      selectedTag: "body",
-      selectedStyles: [],
-      value: [getInitialObject()],
-      disabledButton: false
+      disabledButton: false,
+      addCtr: 0
     };
-
-    this.state.value = [getInitialObject()];
-    this.editor = null;
   }
 
-  componentWIllMount() {
+  componentWillMount() {
     if (!this.props.college.loading) {
       this.props.getColleges();
+    }
+
+    if (this.props.addResearchData !== undefined) {
+      this.setState({
+        college: this.props.addResearchData.collegeName,
+        course: this.props.addResearchData.courseName,
+        addCtr: 1
+      });
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (
-      nextProps.errors.pages === "Research pages is invalid" &&
+      nextProps.errors.title === "Research Title already exists" &&
       this.state.submitCtr === 1
     ) {
-      Alert.alert("Warning", "Research pages is invalid!");
+      Alert.alert("Warning", "Research Title already exists!");
+      this.setState({
+        submitCtr: 0,
+        disabledButton: false
+      });
+    }
+
+    if (
+      nextProps.errors.title === "Research title is required" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "Research title is required!");
       this.setState({
         submitCtr: 0,
         disabledButton: false
@@ -87,8 +96,67 @@ class AddResearchScreen extends Component {
     }
 
     if (
+      nextProps.errors.abstract === "Research Title already exists" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "Research Title already exists!");
+      this.setState({
+        submitCtr: 0,
+        disabledButton: false
+      });
+    }
+
+    if (
+      nextProps.errors.authorOne === "Author One is required" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "Author One is required!");
+      this.setState({
+        submitCtr: 0,
+        disabledButton: false
+      });
+    }
+
+    if (
+      nextProps.errors.researchId === "Research ID is required" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "Research ID is required!");
+      this.setState({
+        submitCtr: 0,
+        disabledButton: false
+      });
+    }
+
+    if (
+      nextProps.errors.pages === "Research pages is invalid" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "Research pages is invalid!");
+      this.setState({
+        submitCtr: 0,
+        disabledButton: false
+      });
+    }
+
+    if (
+      nextProps.errors.schoolYear === "School year is required" &&
+      this.state.submitCtr === 1
+    ) {
+      Alert.alert("Warning", "School year is required!");
+      this.setState({
+        submitCtr: 0,
+        disabledButton: false
+      });
+    }
+
+    if (
       nextProps.errors.abstract === undefined &&
+      nextProps.errors.authorOne === undefined &&
+      nextProps.errors.researchId === undefined &&
+      nextProps.errors.schoolYear === undefined &&
       nextProps.errors.pages === undefined &&
+      nextProps.errors.title === undefined &&
       this.state.submitCtr === 1
     ) {
       this.setState({
@@ -99,59 +167,56 @@ class AddResearchScreen extends Component {
     }
   }
 
-  radioGroupHandler = val => {
-    const getValue = val.find(e => e.selected == true);
-    this.setState({
-      type: getValue.value
-    });
-  };
-
-  changedTitleHandler = val => {
-    this.setState({
-      title: val
-    });
-  };
-
-  changedPagesHandler = val => {
-    this.setState({
-      pages: val
-    });
-  };
-
   submitHandler = () => {
-    const { title, college, course, abstract, pages, schoolyear } = this.state;
-    let convertedData = convertToHtmlString(this.state.value);
+    const {
+      title,
+      college,
+      course,
+      abstract,
+      pages,
+      schoolyear,
+      researchId,
+      authorOne
+    } = this.state;
 
     if (
       title === "" ||
       college === "" ||
       course === "" ||
       pages === "" ||
-      schoolyear === ""
+      abstract === "" ||
+      schoolyear === "" ||
+      researchId === "" ||
+      authorOne === ""
     ) {
       alert("Fill up all the fields!");
     } else {
+      const name =
+        this.props.auth.user.firstName +
+        " " +
+        this.props.auth.user.middleName +
+        " " +
+        this.props.auth.user.lastName;
+
+      let converted = `<p>${this.state.abstract}</p>`;
+
       const researchData = {
         title: this.state.title,
         type: this.state.type,
         college: this.state.college,
         course: this.state.course,
-        abstract: convertedData,
+        authorOne: this.state.authorOne,
+        abstract: converted,
+        researchId: this.state.researchId,
         schoolYear: this.state.schoolyear,
-        pages: this.state.pages
+        pages: this.state.pages,
+        username: name
       };
 
       Alert.alert(
         "Message",
         "Are you sure?",
         [
-          {
-            text: "Cancel",
-            onPress: () => {
-              this.props.navigator.pop();
-            },
-            style: "cancel"
-          },
           {
             text: "NO",
             onPress: () => {},
@@ -173,33 +238,23 @@ class AddResearchScreen extends Component {
     }
   };
 
-  onStyleKeyPress = toolType => {
-    this.editor.applyToolbar(toolType);
+  collegePickerHandler = item => {
+    this.setState({ college: item });
   };
 
-  onSelectedTagChanged = tag => {
+  radioGroupHandler = val => {
+    const getValue = val.find(e => e.selected == true);
     this.setState({
-      selectedTag: tag
-    });
-  };
-
-  onSelectedStyleChanged = styles => {
-    this.setState({
-      selectedStyles: styles
-    });
-  };
-
-  onValueChanged = value => {
-    this.setState({
-      value: value
+      type: getValue.value
     });
   };
 
   render() {
     const { colleges, loading } = this.props.college;
+
     let radioCollegeOptions = [
-      { label: "Thesis", value: "Thesis" },
-      { label: "Undergrad Research", value: "Undergrad Research" }
+      { label: "Thesis", value: "thesis" },
+      { label: "Undergrad Research", value: "undergrad" }
     ];
 
     let dropCollegeOptions = [{ label: "* Select College", value: "" }];
@@ -207,198 +262,196 @@ class AddResearchScreen extends Component {
 
     if (colleges === null || loading) {
     } else {
-      const activeCollege = colleges.filter(college => {
-        return college.deleted === 0;
-      });
+      if (this.props.addResearchData === undefined) {
+        const activeCollege = colleges.filter(college => {
+          return college.deleted === 0;
+        });
 
-      activeCollege.map(college =>
+        activeCollege.map(college =>
+          dropCollegeOptions.push({
+            label: college.name.fullName,
+            value: college.name.fullName
+          })
+        );
+
+        if (this.state.college !== "") {
+          try {
+            const chosenCollege = this.props.college.colleges.find(college => {
+              return college.name.fullName === this.state.college;
+            });
+
+            chosenCollege.course.map(course => {
+              if (course.deleted === 0) {
+                dropCourseOptions.push({
+                  label: course.name,
+                  value: course.name
+                });
+              }
+            });
+          } catch (err) {}
+        }
+      } else {
         dropCollegeOptions.push({
-          label: college.name.fullName,
-          value: college.name.fullName
-        })
-      );
+          label: this.state.college,
+          value: this.state.college
+        });
 
-      activeCollege.map(college =>
-        college.course.map(course => {
-          dropCourseOptions.push({
-            label: course.name,
-            value: course.name
-          });
-        })
-      );
+        dropCourseOptions.push({
+          label: this.state.course,
+          value: this.state.course
+        });
+      }
     }
+    let researchLayout;
 
-    return (
-      <View style={styles.container}>
+    if (colleges === null || loading) {
+      researchLayout = (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Spinner />
+        </View>
+      );
+    } else {
+      researchLayout = (
         <ScrollView
           showsVerticalScrollIndicator={false}
           width="100%"
           display="flex"
         >
-          <View style={{ alignItems: "center" }}>
-            <Text style={{ fontSize: 18, fontWeight: "bold", color: "red" }}>
-              * = Required Fields
-            </Text>
+          <KeyboardAvoidingView
+            behavior="padding"
+            enabled
+            keyboardVerticalOffset={0}
+            style={{
+              flex: 1,
+              paddingTop: 20,
+              flexDirection: "column",
+              flex: 1,
+              justifyContent: "flex-end"
+            }}
+          >
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ fontSize: 18, fontWeight: "bold", color: "red" }}>
+                * = Required Fields
+              </Text>
 
-            <RadioGroup
-              radioButtons={radioCollegeOptions}
-              flexDirection="row"
-              onPress={this.radioGroupHandler}
-            />
+              <RadioGroup
+                radioButtons={radioCollegeOptions}
+                flexDirection="row"
+                onPress={this.radioGroupHandler}
+              />
 
-            <InputComponent
-              placeholder="* Research Title"
-              onChangeText={val => this.setState({ title: val })}
-              value={this.state.title}
-              icon="ios-cog"
-            />
+              <InputText
+                placeholder="* Research Title"
+                onChangeText={val => this.setState({ title: val })}
+                value={this.state.title}
+              />
 
-            <View style={styles.pickerStyle}>
-              <Picker
-                selectedValue={this.state.college}
-                onValueChange={itemValue =>
-                  this.setState({ college: itemValue })
-                }
-              >
-                {dropCollegeOptions.map((colOptions, key) => {
-                  return (
-                    <Picker.Item
-                      key={key}
-                      label={colOptions.label}
-                      value={colOptions.value}
-                    />
-                  );
-                })}
-              </Picker>
-            </View>
-
-            <View style={styles.pickerStyle}>
-              <Picker
-                selectedValue={this.state.course}
-                onValueChange={itemValue =>
-                  this.setState({ course: itemValue })
-                }
-              >
-                {dropCourseOptions.map((corOptions, key) => {
-                  return (
-                    <Picker.Item
-                      key={key}
-                      label={corOptions.label}
-                      value={corOptions.value}
-                    />
-                  );
-                })}
-              </Picker>
-            </View>
-
-            <View
-              style={{
-                width: "80%",
-                minHeight: 200,
-                borderColor: "#000",
-                borderWidth: 1
-              }}
-            >
-              <KeyboardAvoidingView
-                behavior="padding"
-                enabled
-                keyboardVerticalOffset={0}
-                style={{
-                  flex: 1,
-                  backgroundColor: "#eee",
-                  flexDirection: "column",
-                  justifyContent: "flex-end"
-                }}
-              >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                  <View style={styles.main}>
-                    <CNRichTextEditor
-                      ref={input => (this.editor = input)}
-                      onSelectedTagChanged={this.onSelectedTagChanged}
-                      onSelectedStyleChanged={this.onSelectedStyleChanged}
-                      value={this.state.value}
-                      style={{ backgroundColor: "#fff" }}
-                      styleList={defaultStyles}
-                      onValueChanged={this.onValueChanged}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-
-                <View
-                  style={{
-                    minHeight: 35
-                  }}
+              <View style={styles.pickerStyle}>
+                <Picker
+                  enabled={this.state.addCtr === 0 ? true : false}
+                  selectedValue={this.state.college}
+                  onValueChange={itemValue =>
+                    this.collegePickerHandler(itemValue)
+                  }
                 >
-                  <CNToolbar
-                    size={28}
-                    bold={
-                      <Text style={[styles.toolbarButton, styles.boldButton]}>
-                        B
-                      </Text>
-                    }
-                    italic={
-                      <Text style={[styles.toolbarButton, styles.italicButton]}>
-                        I
-                      </Text>
-                    }
-                    underline={
-                      <Text
-                        style={[styles.toolbarButton, styles.underlineButton]}
-                      >
-                        U
-                      </Text>
-                    }
-                    lineThrough={
-                      <Text
-                        style={[styles.toolbarButton, styles.lineThroughButton]}
-                      >
-                        S
-                      </Text>
-                    }
-                    body={<Text style={styles.toolbarButton}>T</Text>}
-                    title={<Text style={styles.toolbarButton}>h1</Text>}
-                    heading={<Text style={styles.toolbarButton}>h3</Text>}
-                    ul={<Text style={styles.toolbarButton}>ul</Text>}
-                    ol={<Text style={styles.toolbarButton}>ol</Text>}
-                    selectedTag={this.state.selectedTag}
-                    selectedStyles={this.state.selectedStyles}
-                    onStyleKeyPress={this.onStyleKeyPress}
-                  />
+                  {dropCollegeOptions.map((colOptions, key) => {
+                    return (
+                      <Picker.Item
+                        key={key}
+                        label={colOptions.label}
+                        value={colOptions.value}
+                      />
+                    );
+                  })}
+                </Picker>
+              </View>
+
+              <View style={styles.pickerStyle}>
+                <Picker
+                  enabled={this.state.addCtr === 0 ? true : false}
+                  selectedValue={this.state.course}
+                  onValueChange={itemValue =>
+                    this.setState({ course: itemValue })
+                  }
+                >
+                  {dropCourseOptions.map((corOptions, key) => {
+                    return (
+                      <Picker.Item
+                        key={key}
+                        label={corOptions.label}
+                        value={corOptions.value}
+                      />
+                    );
+                  })}
+                </Picker>
+              </View>
+
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  placeholder="* Abstract"
+                  underlineColorAndroid="transparent"
+                  placeholderTextColor="grey"
+                  numberOfLines={5}
+                  multiline={true}
+                  onChangeText={val => this.setState({ abstract: val })}
+                  value={this.state.abstract}
+                  style={{
+                    justifyContent: "flex-start",
+                    maxHeight: 300,
+                    textAlignVertical: "top"
+                  }}
+                />
+              </View>
+
+              <InputText
+                placeholder="* Author One"
+                onChangeText={val => this.setState({ authorOne: val })}
+                value={this.state.authorOne}
+              />
+
+              <InputText
+                placeholder="* Research ID"
+                onChangeText={val => this.setState({ researchId: val })}
+                value={this.state.researchId}
+              />
+
+              <InputText
+                placeholder="* Pages"
+                onChangeText={val => this.setState({ pages: val })}
+                value={this.state.pages}
+              />
+
+              <InputText
+                placeholder="* Academic Year"
+                onChangeText={val => this.setState({ schoolyear: val })}
+                value={this.state.schoolyear}
+              />
+
+              <TouchableOpacity
+                onPress={this.submitHandler}
+                disabledButton={this.state.disabledButton}
+              >
+                <View style={[styles.button, { width: "40%" }]}>
+                  <Text style={{ color: "white" }}>Submit</Text>
                 </View>
-              </KeyboardAvoidingView>
+              </TouchableOpacity>
             </View>
-
-            <InputComponent
-              placeholder="* School Year"
-              onChangeText={val => this.setState({ schoolyear: val })}
-              value={this.state.schoolyear}
-              icon="ios-cog"
-            />
-
-            <InputComponent
-              placeholder="* Pages"
-              onChangeText={val => this.setState({ pages: val })}
-              value={this.state.pages}
-              icon="ios-cog"
-            />
-
-            <ButtonComponent
-              onPress={this.submitHandler}
-              disabledButton={this.state.disabledButton}
-            >
-              Submit
-            </ButtonComponent>
-          </View>
+          </KeyboardAvoidingView>
         </ScrollView>
-      </View>
-    );
+      );
+    }
+
+    return <View style={styles.container}>{researchLayout}</View>;
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%"
+    width: "100%",
+    backgroundColor: "#fff"
   },
   pickerStyle: {
     width: "80%",
@@ -409,32 +462,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 10
   },
-  textContainer: {
+  textInputContainer: {
     width: "80%",
+    maxHeight: 200,
     borderColor: "#000",
-    borderWidth: 0.5
+    borderWidth: 1
   },
-  main: {
-    flex: 1,
-    alignItems: "stretch"
-  },
-  toolbarButton: {
-    fontSize: 20,
-    width: 28,
-    height: 28,
-    textAlign: "center"
-  },
-  italicButton: {
-    fontStyle: "italic"
-  },
-  boldButton: {
-    fontWeight: "bold"
-  },
-  underlineButton: {
-    textDecorationLine: "underline"
-  },
-  lineThroughButton: {
-    textDecorationLine: "line-through"
+  button: {
+    backgroundColor: "#007bff",
+    padding: 12,
+    marginLeft: 8,
+    marginTop: 16,
+    marginBottom: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 4,
+    borderColor: "#007bff"
   }
 });
 
@@ -447,81 +490,11 @@ AddResearchScreen.propTypes = {
 
 const mapStateToProps = state => ({
   college: state.college,
-  errors: state.errors
+  errors: state.errors,
+  auth: state.auth
 });
 
 export default connect(
   mapStateToProps,
   { createResearch, getColleges }
 )(AddResearchScreen);
-
-/*
-
-            <View style={styles.main}>
-              <CNRichTextEditor
-                ref={input => (this.editor = input)}
-                onSelectedTagChanged={this.onSelectedTagChanged}
-                onSelectedStyleChanged={this.onSelectedStyleChanged}
-                value={this.state.value}
-                onValueChanged={this.onValueChanged}
-                style={{ backgroundColor: "#fff", padding: 10 }}
-              />
-            </View>
-
-            <View
-              style={{
-                minHeight: 35
-              }}
-            >
-              <CNToolbar
-                size={28}
-                bold={<MaterialCommunityIcons name="format-bold" />}
-                italic={<MaterialCommunityIcons name="format-italic" />}
-                underline={<MaterialCommunityIcons name="format-underline" />}
-                lineThrough={
-                  <MaterialCommunityIcons name="format-strikethrough-variant" />
-                }
-                body={<MaterialCommunityIcons name="format-text" />}
-                title={<MaterialCommunityIcons name="format-header-1" />}
-                heading={<MaterialCommunityIcons name="format-header-3" />}
-                ul={<MaterialCommunityIcons name="format-list-bulleted" />}
-                ol={<MaterialCommunityIcons name="format-list-numbers" />}
-                selectedTag={this.state.selectedTag}
-                selectedStyles={this.state.selectedStyles}
-                onStyleKeyPress={this.onStyleKeyPress}
-              />
-            </View>
-
-            <View style={styles.textContainer}>
-              <TextInput
-                multiline={true}
-                numberOfLines={5}
-                style={{ maxHeight: 150, textAlignVertical: "top" }}
-                placeholder="* Abstract"
-                onChangeText={this.changedAbstractHandler}
-              />
-            </View>
-
-
-
-
-                           <RichTextEditor
-                ref={r => (this.richtext = r)}
-                contentPlaceholder={"*Abstract"}
-                hiddenTitle={true}
-                initialContentHTML={""}
-                editorInitializedCallback={() => this.onEditorInitialized()}
-              />
-              <RichTextToolbar
-                getEditor={() => this.richtext}
-                actions={[
-                  actions.setBold,
-                  actions.setUnderline,
-                  actions.setItalic,
-                  actions.insertBulletsList,
-                  actions.insertOrderedList
-                ]}
-                selectedButtonStyle={{ backgroundColor: "#06c" }}
-              /> 
-
-*/

@@ -5,12 +5,16 @@ import authReducer from "./reducers/authReducer";
 import errorReducer from "./reducers/errorReducer";
 import collegeReducer from "./reducers/collegeReducer";
 import researchReducer from "./reducers/researchReducers";
+import activityReducer from "./reducers/activityReducer";
+import journalReducer from "./reducers/journalReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  activity: activityReducer,
   errors: errorReducer,
   college: collegeReducer,
-  research: researchReducer
+  research: researchReducer,
+  journal: journalReducer
 });
 
 const middleware = [thunk];

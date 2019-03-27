@@ -11,6 +11,11 @@ const flatList = props => {
       renderItem={info => (
         <ListItem
           collegeName={info.item.name.fullName}
+          status={parseInt(info.item.deleted)}
+          researchTot={parseInt(info.item.researchTotal)}
+          journalTot={parseInt(info.item.journalTotal)}
+          itemWidth={props.width}
+          itemHeight={props.height}
           collegeImage={
             "https://s3-ap-southeast-1.amazonaws.com/bulsu-capstone/collegeLogos/" +
             info.item.logo

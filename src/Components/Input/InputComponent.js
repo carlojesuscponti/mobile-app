@@ -7,9 +7,8 @@ const { width, height } = Dimensions.get("screen");
 const InputComponent = props => {
   return (
     <View style={styles.SectionStyle}>
-      <Icon name={props.icon} size={25} style={styles.IconStyle} />
       <TextInput
-        style={{ flex: 1 }}
+        style={{ flex: 1, marginLeft: 10, marginRight: 10 }}
         {...props}
         underlineColorAndroid="transparent"
       />
@@ -29,9 +28,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: 10,
     width: "80%"
-  },
-  IconStyle: {
-    margin: 10
   }
 });
 

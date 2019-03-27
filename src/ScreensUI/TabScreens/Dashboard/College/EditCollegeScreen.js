@@ -28,7 +28,6 @@ class EditCollegeScreen extends Component {
       background: this.props.collegeData.color,
       researchTotal: this.props.collegeData.researchTotal,
       journalTotal: this.props.collegeData.journalTotal,
-      errors: {},
       submitCtr: 0
     };
 
@@ -44,7 +43,8 @@ class EditCollegeScreen extends Component {
       this.setState({
         submitCtr: 0
       });
-    } else if (
+    }
+    if (
       nextProps.errors.fullName === "College Name is required" &&
       this.state.submitCtr === 1
     ) {
@@ -52,7 +52,8 @@ class EditCollegeScreen extends Component {
       this.setState({
         submitCtr: 0
       });
-    } else if (
+    }
+    if (
       nextProps.errors.initials === "College Initials already exists" &&
       this.state.submitCtr === 1
     ) {
@@ -60,7 +61,8 @@ class EditCollegeScreen extends Component {
       this.setState({
         submitCtr: 0
       });
-    } else if (
+    }
+    if (
       nextProps.errors.initials === "College Initials is required" &&
       this.state.submitCtr === 1
     ) {
@@ -68,7 +70,8 @@ class EditCollegeScreen extends Component {
       this.setState({
         submitCtr: 0
       });
-    } else if (
+    }
+    if (
       nextProps.errors.librarian === "College librarian is required" &&
       this.state.submitCtr === 1
     ) {
@@ -76,7 +79,8 @@ class EditCollegeScreen extends Component {
       this.setState({
         submitCtr: 0
       });
-    } else if (
+    }
+    if (
       nextProps.errors.fullName === undefined &&
       nextProps.errors.initials === undefined &&
       nextProps.errors.librarian === undefined &&
@@ -116,6 +120,13 @@ class EditCollegeScreen extends Component {
     if (fullName === "" || initials === "" || librarian === "") {
       Alert.alert("Warning", "Fill up the fields!");
     } else {
+      const name =
+        this.props.auth.user.firstName +
+        " " +
+        this.props.auth.user.middleName +
+        " " +
+        this.props.auth.user.lastName;
+
       const collegeData = {
         oldName: this.props.collegeData.name.fullName,
         oldInitials: this.props.collegeData.name.initials,
@@ -128,7 +139,8 @@ class EditCollegeScreen extends Component {
         color: this.state.background,
         researchTotal: this.state.researchTotal,
         journalTotal: this.state.journalTotal,
-        id: this.props.collegeData._id
+        id: this.props.collegeData._id,
+        username: name
       };
 
       Alert.alert(
@@ -218,12 +230,14 @@ const styles = StyleSheet.create({
 EditCollegeScreen.propTypes = {
   getColleges: PropTypes.func.isRequired,
   college: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
+  errors: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   college: state.college,
-  errors: state.errors
+  errors: state.errors,
+  auth: state.auth
 });
 
 export default connect(

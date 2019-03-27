@@ -9,12 +9,6 @@ const ButtonComponent = props => {
       disabled={props.disabledButton}
     >
       <View style={styles.buttonStyle}>
-        <Icon
-          name={props.iconName}
-          size={20}
-          color="white"
-          style={{ paddingRight: 5 }}
-        />
         <Text style={styles.textStyle}>{props.children}</Text>
       </View>
     </TouchableNativeFeedback>
@@ -24,18 +18,16 @@ const ButtonComponent = props => {
 const styles = StyleSheet.create({
   buttonStyle: {
     width: "50%",
-    height: 40,
-    backgroundColor: "#17a2b8",
-    borderRadius: 20,
-    margin: 10,
-    marginTop: 20,
-    paddingLeft: 15,
-    paddingRight: 15,
-    fontStyle: "normal",
-    color: "white",
+    backgroundColor: "#138496",
+    padding: 12,
+    margin: 16,
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "row"
+    flexDirection: "row",
+    borderColor: "#117a8b"
   },
   iconStyles: {
     paddingRight: 5

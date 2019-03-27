@@ -1,9 +1,9 @@
 import React from "react";
 import { StyleSheet, FlatList, View } from "react-native";
-
 import ListItem from "./GridView";
 
 const gridList = props => {
+  console.log(props.width);
   return (
     <FlatList
       style={styles.listContainer}
@@ -11,7 +11,10 @@ const gridList = props => {
       renderItem={info => (
         <ListItem
           collegeName={info.item.name.fullName}
+          collegeInitials={info.item.name.initials}
           itemWidth={props.width}
+          itemHeight={props.height}
+          status={parseInt(info.item.deleted)}
           collegeImage={
             "https://s3-ap-southeast-1.amazonaws.com/bulsu-capstone/collegeLogos/" +
             info.item.logo

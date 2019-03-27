@@ -98,6 +98,13 @@ class EditCourseScreen extends Component {
     if (name === "" || initials === "") {
       Alert.alert("Warning", "Fill up the fields!");
     } else {
+      const uname =
+        this.props.auth.user.firstName +
+        " " +
+        this.props.auth.user.middleName +
+        " " +
+        this.props.auth.user.lastName;
+
       const courseData = {
         name: name,
         initials: initials,
@@ -107,20 +114,14 @@ class EditCourseScreen extends Component {
         colId: collegeId,
         courseId: courseId,
         deactivate: deactivate,
-        colInit: this.props.courseData.collegeInit
+        colInit: this.props.courseData.collegeInit,
+        username: uname
       };
 
       Alert.alert(
         "Message",
         "Are you sure?",
         [
-          {
-            text: "Cancel",
-            onPress: () => {
-              this.props.navigator.pop();
-            },
-            style: "cancel"
-          },
           {
             text: "NO",
             onPress: () => {},
@@ -196,12 +197,14 @@ const styles = StyleSheet.create({
 EditCourseScreen.propTypes = {
   editCourse: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
-  college: PropTypes.object.isRequired
+  college: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   errors: state.errors,
-  college: state.college
+  college: state.college,
+  auth: state.auth
 });
 
 export default connect(
